@@ -21,6 +21,7 @@ h2 {text-align:center;}
 </style>
 <title>Create Account</title>
 </head>
+<a href="${pageContext.request.contextPath}/home">Back to home</a>
 
 <h1>Registration</h1>
 <br>
