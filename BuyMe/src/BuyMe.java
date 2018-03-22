@@ -13,6 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*
+ * Kyle and Kristen
+ * worked on this page together
+ * 
+ */
 
 @WebServlet("/")
 public class BuyMe extends HttpServlet {
