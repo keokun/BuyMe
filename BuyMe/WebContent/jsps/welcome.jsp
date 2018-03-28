@@ -7,6 +7,12 @@
 <style>
 h1 {text-align:center;}
 h2 {text-align:center;}
+h3 {text-align: left;}
+h4 {text-align: right;}
+h5 {text-align: right;}
+h6 {text-align: right;}
+
+
 
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -19,6 +25,15 @@ h2 {text-align:center;}
 
 <h2> Let's get started.</h2>
 
+<h3> Inbox </h3>
+
+<h4> My Auctions</h4>
+
+<h5> Create Auction</h5>
+
+<h6> Delete Account</h6>
+
+Contact Us
 
 </body>
 </html>
