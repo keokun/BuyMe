@@ -50,7 +50,7 @@ public class CreateAccount extends HttpServlet {
 			      conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
 
 			      String sql;
-			      sql = "INSERT INTO Account (type, username, password, email, fname, lname)"
+			      sql = "INSERT INTO Account (accountType, username, password, email, fname, lname)"
 			      		+ "VALUES ('regular', '" + username + "', '" + password + "', '" + email + "', '" + fname + "', '" + lname + "')";
 			      stmt=conn.prepareStatement(sql);
 			      stmt.executeUpdate();
@@ -58,11 +58,13 @@ public class CreateAccount extends HttpServlet {
 			      stmt.close();
 			      conn.close();
 			      
+			      /* On Success*/
 		    	  request.setAttribute("success",true);
 		    	  request.setAttribute("firstname", fname);
 		    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/welcome.jsp");
 		    	  dispatcher.forward(request,response);
 			      
+		    	  /* On Failure*/
 			      
 			   }catch(SQLException se){
 			      se.printStackTrace();
@@ -106,13 +108,16 @@ public class CreateAccount extends HttpServlet {
 			      stmt.close();
 			      conn.close();
 			      
+			      /* On Success*/
+
 		    	  request.setAttribute("success",true);
 		    	  request.setAttribute("firstname", fname);
 		    	  request.setAttribute("lastname",lname);
 		    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/adminpage.jsp");
 		    	  dispatcher.forward(request,response);
 			      
-			      
+		    	  /* On Failure*/
+
 			   }catch(SQLException se){
 			      se.printStackTrace();
 			      request.setAttribute("success",false);

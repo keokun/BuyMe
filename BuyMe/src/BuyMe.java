@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /*
- * Kyle and Kristen
+ * Josh Kyle and Kristen
  * worked on this page together
  * 
  */
@@ -61,10 +61,30 @@ private static final long serialVersionUID = 1L;
 			      
 			      if(rs.next()) {
 			    	  String fn = rs.getString("fname");
+			    	  String ln = rs.getString("lname");
+			    	  String type = rs.getString("type");
 			    	  request.setAttribute("success",true);
 			    	  request.setAttribute("firstname", fn);
-			    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/welcome.jsp");
-			    	  dispatcher.forward(request,response);
+			    	  //customer account
+			    	  if (type.equals("regular"))
+			    	  {
+				    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/welcome.jsp");
+				    	  dispatcher.forward(request,response);
+
+			    	  }
+			    	  //customer rep account
+			    	  else if (type.equals("rep"))
+			    	  {
+				    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/rephome.jsp");
+				    	  dispatcher.forward(request,response);
+
+			    	  }
+			    	  //admin account
+			    	  else if (type.equals("admin"))
+			    	  {
+				    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/adminpage.jsp");
+				    	  dispatcher.forward(request,response);
+			    	  }
 			      } 
 			      
 			      else {
