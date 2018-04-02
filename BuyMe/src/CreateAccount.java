@@ -50,7 +50,7 @@ public class CreateAccount extends HttpServlet {
 			      conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
 
 			      String sql;
-			      sql = "INSERT INTO Account (type, username, pass, email, fname, lname)"
+			      sql = "INSERT INTO Account (type, username, password, email, fname, lname)"
 			      		+ "VALUES ('regular', '" + username + "', '" + password + "', '" + email + "', '" + fname + "', '" + lname + "')";
 			      stmt=conn.prepareStatement(sql);
 			      stmt.executeUpdate();
@@ -98,7 +98,7 @@ public class CreateAccount extends HttpServlet {
 			      conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
 
 			      String sql;
-			      sql = "INSERT INTO Account (type, username, pass, email, fname, lname)"
+			      sql = "INSERT INTO Account (type, username, password, email, fname, lname)"
 			      		+ "VALUES ('rep', '" + username + "', '" + password + "', '" + email + "', '" + fname + "', '" + lname + "')";
 			      stmt=conn.prepareStatement(sql);
 			      stmt.executeUpdate();
