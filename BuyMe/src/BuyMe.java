@@ -55,7 +55,7 @@ private static final long serialVersionUID = 1L;
 			      conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
 			      String sql;
-			      sql = "SELECT * FROM Accounts	 WHERE username='" + username + "'AND pass='" + password + "'";
+			      sql = "SELECT * FROM Account	 WHERE username='" + username + "'AND pass='" + password + "'";
 			      stmt=conn.prepareStatement(sql);
 			      ResultSet rs=stmt.executeQuery();
 			      
