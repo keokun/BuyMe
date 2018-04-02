@@ -25,7 +25,7 @@ public class BuyMe extends HttpServlet {
 private static final long serialVersionUID = 1L;
 	
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	static final String DB_URL = "jdbc:mysql://joshdb.cugqewczk5li.us-east-1.rds.amazonaws.com:3306/PROJDBcs336";
+	static final String DB_URL = "jdbc:mysql://joshdb.cugqewczk5li.us-east-1.rds.amazonaws.com:3306/projdbcs336";
 	
 	static final String USER = "root";
 	static final String PASS = "ScarletKnight";
