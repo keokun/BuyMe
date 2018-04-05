@@ -65,6 +65,7 @@ private static final long serialVersionUID = 1L;
 			    	  String type = rs.getString("type");
 			    	  request.setAttribute("success",true);
 			    	  request.setAttribute("firstname", fn);
+			    	  request.getSession().setAttribute("username", username);
 			    	  //customer account
 			    	  if (type.equals("regular"))
 			    	  {

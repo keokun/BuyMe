@@ -50,7 +50,7 @@ public class CreateAccount extends HttpServlet {
 			      conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
 
 			      String sql;
-			      sql = "INSERT INTO Account (accountType, username, password, email, fname, lname)"
+			      sql = "INSERT INTO Account (type, username, password, email, fname, lname)"
 			      		+ "VALUES ('regular', '" + username + "', '" + password + "', '" + email + "', '" + fname + "', '" + lname + "')";
 			      stmt=conn.prepareStatement(sql);
 			      stmt.executeUpdate();
@@ -61,6 +61,7 @@ public class CreateAccount extends HttpServlet {
 			      /* On Success*/
 		    	  request.setAttribute("success",true);
 		    	  request.setAttribute("firstname", fname);
+		    	  request.getSession().setAttribute("username", username);
 		    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/welcome.jsp");
 		    	  dispatcher.forward(request,response);
 			      

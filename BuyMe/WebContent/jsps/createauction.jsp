@@ -125,6 +125,8 @@ function selectCheckNonFictionSub(nameSelect)
 	
 	<input  type="number" name="closeMinutes" placeholder="Close Minutes"  step="1" required=true; min="0" max=59>
 	
+	<input  type="number" name="reservePrice" placeholder="Reserve Price $"  step="0.01" required=true; min="0">
+	
 	<select name="format" onchange="selectCheckFormat(this);">
 		<option value="physical">Physical</option>
 		<option value="ebook">Ebook</option>
