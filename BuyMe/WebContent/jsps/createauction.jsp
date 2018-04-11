@@ -93,6 +93,178 @@ function selectCheckNonFictionSub(nameSelect)
         
     }
 }
+
+
+function validateForm() {
+	var title=document.forms["auctionForm"]["title"].value;
+	
+	if(title=="") {
+		alert("Please enter a title");
+		return false;
+	}
+	
+	var author=document.forms["auctionForm"]["author"].value;
+	
+	if(author=="") {
+		alert("Please enter an author");
+		return false;
+	}
+	
+	var author=document.forms["auctionForm"]["isbn"].value;
+	
+	if(isbn=="") {
+		alert("Please enter an isbn");
+		return false;
+	}
+	
+	var publisher=document.forms["auctionForm"]["publisher"].value;
+	
+	if(publisher=="") {
+		alert("Please enter a publisher");
+		return false;
+	}
+	
+	var openDate=document.forms["auctionForm"]["openDate"].value;
+	
+	if(openDate=="") {
+		alert("Please select an open date");
+		return false;
+	}
+	
+	var closeDate=document.forms["auctionForm"]["closeDate"].value;
+	
+	if(closeDate=="") {
+		alert("Please select a close date");
+		return false;
+	}
+	
+	var openHour=parseInt(document.forms["auctionForm"]["openHour"].value,10);
+	
+	if(openHour<0||openHour>23||openHour=="") {
+		alert("Please enter a valid open hour");
+		return false;
+	}
+	
+	var closeHour=parseInt(document.forms["auctionForm"]["closeHour"].value,10);
+	
+	if(closeHour<0||closeHour>23||closeHour=="") {
+		alert("Please enter a valid close hour");
+		return false;
+	}
+	
+	var openMinutes=parseInt(document.forms["auctionForm"]["openMinutes"].value,10);
+	
+	if(openMinutes<0||openMinutes>59||openMinutes=="") {
+		alert("Please enter a valid open minutes");
+		return false;
+	}
+	
+	var closeMinutes=parseInt(document.forms["auctionForm"]["closeMinutes"].value,10);
+	
+	if(closeMinutes<0||closeMinutes>59||closeMinutes=="") {
+		alert("Please enter a valid open minutes");
+		return false;
+	}
+	
+	var reservePrice=parseFloat(document.forms["auctionForm"]["reservePrice"].value);
+	
+	if(reservePrice<0||reservePrice=="") {
+		alert("Please enter a valid reserve price");
+		return false;
+	}
+	
+	var format=document.forms["auctionForm"]["format"].value;
+	
+	if(format=="physical"||format=="audiobook") {
+		var numPages=document.forms["auctionForm"]["numPages"].value;
+		
+		if(numPages<1||numPages=="") {
+			alert("Please enter a valid number of pages");
+			return false;
+		}
+	}
+	
+	var fictionType=document.forms["auctionForm"]["format"].value;
+	
+	if(fictionType=="fiction") {
+		var genre=document.forms["auctionForm"]["genre"].value;
+		
+		if(genre=="") {
+			alert("Please enter a genre");
+			return false;
+		}
+		
+		var fictionSubType=document.forms["auctionForm"]["fictionSubType"].value;
+		
+		if(fictionSubType=="anthology") {
+			var editors=document.forms["auctionForm"]["editors"].value;
+			
+			if(editors=="") {
+				alert("Please enter a valid number of editors");
+				return false;
+			}
+		}
+		
+		else if (fictionSubType=="poetry") {
+			var poetryStyle=document.forms["auctionForm"]["poetryStyle"].value;
+			
+			if(poetryStyle=="") {
+				alert("Please enter a valid poetry style");
+				return false;
+			}
+		}
+		
+		else if (fictionSubType=="comics") {
+			var volume=document.forms["auctionForm"]["volume"].value;
+			var issueComic=document.forms["auctionForm"]["issueComic"].value;
+			
+			if(volume=="") {
+				alert("Please enter a valid volume");
+				return false;
+			}
+			
+			if(issueComic=="") {
+				alert("Please enter a valid issue");
+				return false;
+			}
+		}
+	}
+	
+	else {
+		var subject=document.forms["auctionForm"]["subject"].value;
+		
+		if(subject=="") {
+			alert("Please enter a valid subject");
+			return false;
+		}
+			
+			
+		var nonfictionSubType=document.forms["auctionForm"]["nonfictionSubType"].value;
+		
+		if(nonfictionSubType=="biography") {
+			var era = document.forms["auctionForm"]["era"].value;
+			
+			if(era=="") {
+				alert("Please enter a valid era"); 
+				return false;
+			}
+		}
+		
+		else if (nonfictionSubType=="magazine") {
+			var magazineIssue=documents.forms["auctionForm"]["magazineIssue"].value;
+			
+			if(magazineIssue=="") {
+				alert("Please enter a valid issue");
+				return false;
+			}
+		}
+	}
+	
+	
+	return true;
+	
+	
+}
 </script>
 
 
@@ -102,30 +274,30 @@ function selectCheckNonFictionSub(nameSelect)
 
 <h1>Create Auction</h1>
 
-<form action="${pageContext.request.contextPath}/createauction" method="post">
+<form name="auctionForm" action="${pageContext.request.contextPath}/createauction" onsubmit="return validateForm()"  method="post">
 	
 
-	<input type="text" name="title" placeholder="Title" required=true>
+	<input type="text" name="title" placeholder="Title">
 	
-	<input type="text" name="author" placeholder="Author" required=true>
+	<input type="text" name="author" placeholder="Author">
 	
-	<input type="text" name="isbn" placeholder="ISBN" required=true>
+	<input type="text" name="isbn" placeholder="ISBN">
 	
-	<input type="text" name="publisher" placeholder="Publisher" required=true>
+	<input type="text" name="publisher" placeholder="Publisher">
 	
-	<input  type="date" name="openDate" required=true;>
+	<input  type="date" name="openDate">
 	
-	<input  type="number" name="openHour" placeholder="Open Hour"  step="1" required=true; min="0" max=23>
+	<input  type="number" name="openHour" placeholder="Open Hour"  step="1">
 	
-	<input  type="number" name="openMinutes" placeholder="Open Minutes"  step="1" required=true; min="0" max=59>
+	<input  type="number" name="openMinutes" placeholder="Open Minutes"  step="1">
 	
-	<input  type="date" name="closeDate" requires=true;>
+	<input  type="date" name="closeDate">
 	
-	<input  type="number" name="closeHour" placeholder="Close Hour"  step="1" required=true; min="0" max=23>
+	<input  type="number" name="closeHour" placeholder="Close Hour"  step="1">
 	
-	<input  type="number" name="closeMinutes" placeholder="Close Minutes"  step="1" required=true; min="0" max=59>
+	<input  type="number" name="closeMinutes" placeholder="Close Minutes"  step="1">
 	
-	<input  type="number" name="reservePrice" placeholder="Reserve Price $"  step="0.01" required=true; min="0">
+	<input  type="number" name="reservePrice" placeholder="Reserve Price $"  step="0.01">
 	
 	<select name="format" onchange="selectCheckFormat(this);">
 		<option value="physical">Physical</option>
@@ -134,7 +306,7 @@ function selectCheckNonFictionSub(nameSelect)
 	</select>
 	
 	<div id="formatChoicesOptions">
-		<input type="number" name="numPages" placeholder="Number of Pages" size=10 min="1" step="1">
+		<input type="number" name="numPages" placeholder="Number of Pages" size=10 step="1">
 	</div>
 	
 	

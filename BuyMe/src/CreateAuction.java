@@ -151,7 +151,7 @@ public class CreateAuction extends HttpServlet {
 		      Timestamp closeTS=new Timestamp(dateClose.getTime());
 		      
 		      //insert new auctin entry
-		      sql="INSERT INTO Auction(posttime, endtime, auctionid, startprice, seller) VALUES ('" + openTS + "', '" + closeTS + "', " + auctionId
+		      sql="INSERT INTO Auction(posttime, endtime, auctionid, reserve, seller) VALUES ('" + openTS + "', '" + closeTS + "', " + auctionId
 		    		  + ", " + reservePrice + ", '" + username + "')";
 		      
 		      //System.out.println(sql);
