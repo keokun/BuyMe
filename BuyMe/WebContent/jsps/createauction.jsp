@@ -10,7 +10,7 @@ function selectCheckFormat(nameSelect)
 {
     if(nameSelect){
     	if("physical"==nameSelect.value||"ebook"==nameSelect.value) {
-    		document.getElementById("formatChoicesOptions").style.display = "block";
+    		document.getElementById("formatChoicesOptions").style.display = "inline-block";
     	}
     	else if("audiobook" == nameSelect.value) {
     		document.getElementById("formatChoicesOptions").style.display = "none";
@@ -28,12 +28,12 @@ function selectCheckFiction(nameSelect)
 {
     if(nameSelect){
 		if("fiction" == nameSelect.value){
-            document.getElementById("fictionChoicesOptions").style.display = "block";
+            document.getElementById("fictionChoicesOptions").style.display = "inline-block";
         	document.getElementById("nonfictionChoicesOptions").style.display = "none";
         }
         else if("nonfiction" == nameSelect.value){
             document.getElementById("fictionChoicesOptions").style.display = "none";
-            document.getElementById("nonfictionChoicesOptions").style.display = "block";
+            document.getElementById("nonfictionChoicesOptions").style.display = "inline-block";
         }
     }
     else{
@@ -45,20 +45,20 @@ function selectCheckFictionSub(nameSelect)
 {
     if(nameSelect){
 		if("anthology" == nameSelect.value){
-            document.getElementById("anthologyOptions").style.display = "block";
+            document.getElementById("anthologyOptions").style.display = "inline-block";
         	document.getElementById("poetryOptions").style.display = "none";
         	document.getElementById("comicOptions").style.display = "none";
         }
         else if("poetry" == nameSelect.value){
         	document.getElementById("anthologyOptions").style.display = "none";
-         	document.getElementById("poetryOptions").style.display = "block";
+         	document.getElementById("poetryOptions").style.display = "inline-block";
          	document.getElementById("comicOptions").style.display = "none";
         }
 		
         else if("comics" == nameSelect.value){
        	 	document.getElementById("anthologyOptions").style.display = "none";
         	document.getElementById("poetryOptions").style.display = "none";
-        	document.getElementById("comicOptions").style.display = "block";
+        	document.getElementById("comicOptions").style.display = "inline-block";
        }
 		
         else {
@@ -76,12 +76,12 @@ function selectCheckNonFictionSub(nameSelect)
 {
     if(nameSelect){
 		if("biography" == nameSelect.value){
-            document.getElementById("biographyOptions").style.display = "block";
+            document.getElementById("biographyOptions").style.display = "inline-block";
         	document.getElementById("magazineOptions").style.display = "none";
         }
         else if("magazine" == nameSelect.value){
         	document.getElementById("biographyOptions").style.display = "none";
-        	document.getElementById("magazineOptions").style.display = "block";
+        	document.getElementById("magazineOptions").style.display = "inline-block";
         }
 		
         else {
@@ -267,6 +267,81 @@ function validateForm() {
 }
 </script>
 
+<style>
+
+h1 {
+	text-align: center;
+}
+
+#bookDetails{
+	text-align: center;
+}
+
+#formatDiv {
+	text-align: center;
+	display: inline-block;
+}
+
+#formatChoicesOptions {
+	display: inline-block;
+}
+
+#times {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#detailedBookDetails {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#fictionChoicesOptions {
+	text-align: center;
+	display: inline-block;
+}
+
+#anthologyOptions {
+	text-align: center;
+	display: inline-block;
+}
+
+#poetryOptions {
+	text-align: center;
+	display: inline-block;
+}
+
+#comicOptions {
+	text-align: center;
+	display: inline-block;
+}
+
+#nonfictionChoicesOptions {
+	text-align: center;
+	display: inline-block;
+}
+
+#biographyOptions {
+	text-align: center;
+	display: inline-block;
+}
+
+#magazineOptions {
+	text-align: center;
+	display: inline-block;
+}
+
+#reservePriceDiv {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#submitButton {
+	margin-top: 10px;
+	text-align: center;
+}
+
+</style>
 
 <title>Create Auction</title>
 </head>
@@ -276,87 +351,102 @@ function validateForm() {
 
 <form name="auctionForm" action="${pageContext.request.contextPath}/createauction" onsubmit="return validateForm()"  method="post">
 	
-
-	<input type="text" name="title" placeholder="Title">
+	<div id="bookDetails">
+		<input type="text" name="title" placeholder="Title">
+		
+		<input type="text" name="author" placeholder="Author">
+		
+		<input type="text" name="isbn" placeholder="ISBN">
+		
+		<input type="text" name="publisher" placeholder="Publisher">
+		
+		<div id="formatDiv">
+			<select name="format" onchange="selectCheckFormat(this);">
+				<option value="physical">Physical</option>
+				<option value="ebook">Ebook</option>
+				<option value="audiobook">Audiobook</option>
+			</select>
+			
+			<div id="formatChoicesOptions">
+				<input type="number" name="numPages" placeholder="Number of Pages" size=10 step="1">
+			</div>
+		</div>
 	
-	<input type="text" name="author" placeholder="Author">
-	
-	<input type="text" name="isbn" placeholder="ISBN">
-	
-	<input type="text" name="publisher" placeholder="Publisher">
-	
-	<input  type="date" name="openDate">
-	
-	<input  type="number" name="openHour" placeholder="Open Hour"  step="1">
-	
-	<input  type="number" name="openMinutes" placeholder="Open Minutes"  step="1">
-	
-	<input  type="date" name="closeDate">
-	
-	<input  type="number" name="closeHour" placeholder="Close Hour"  step="1">
-	
-	<input  type="number" name="closeMinutes" placeholder="Close Minutes"  step="1">
-	
-	<input  type="number" name="reservePrice" placeholder="Reserve Price $"  step="0.01">
-	
-	<select name="format" onchange="selectCheckFormat(this);">
-		<option value="physical">Physical</option>
-		<option value="ebook">Ebook</option>
-		<option value="audiobook">Audiobook</option>
-	</select>
-	
-	<div id="formatChoicesOptions">
-		<input type="number" name="numPages" placeholder="Number of Pages" size=10 step="1">
 	</div>
 	
+	<div id="detailedBookDetails">
 	
-	<select name="fictionType" onchange="selectCheckFiction(this);">
-		<option value="fiction">Fiction</option>
-		<option value="nonfiction">Nonfiction</option>
-	</select>
-	
-	<div id="fictionChoicesOptions">
-		<input type="text" name="genre" placeholder="Genre">
-		<select name="fictionSubType" onchange="selectCheckFictionSub(this);">
-			<option value="novel">Novel</option>
-			<option value="anthology">Anthology</option>
-			<option value="poetry">Poetry</option>
-			<option value="comics">Comics/Graphic Novels</option>
+		<select name="fictionType" onchange="selectCheckFiction(this);">
+			<option value="fiction">Fiction</option>
+			<option value="nonfiction">Nonfiction</option>
 		</select>
 		
-		<div id= "anthologyOptions" style="display:none;">
-			<input type="text" name="editors" placeholder="Editors">
-		</div>
+		<div id="fictionChoicesOptions">
+			<input type="text" name="genre" placeholder="Genre">
+			<select name="fictionSubType" onchange="selectCheckFictionSub(this);">
+				<option value="novel">Novel</option>
+				<option value="anthology">Anthology</option>
+				<option value="poetry">Poetry</option>
+				<option value="comics">Comics/Graphic Novels</option>
+			</select>
 			
-		<div id= "poetryOptions" style="display:none;">
-			<input type="text" name="poetryStyle" placeholder="Style">
+			<div id= "anthologyOptions" style="display:none;">
+				<input type="text" name="editors" placeholder="Editors">
+			</div>
+				
+			<div id= "poetryOptions" style="display:none;">
+				<input type="text" name="poetryStyle" placeholder="Style">
+			</div>
+				
+			<div id= "comicOptions" style="display:none;">
+				<input type="text" name="volume" placeholder="Volume">
+				<input type="text" name="issueComic" placeholder="Issue">
+			</div>
 		</div>
-			
-		<div id= "comicOptions" style="display:none;">
-			<input type="text" name="volume" placeholder="Volume">
-			<input type="text" name="issueComic" placeholder="Issue">
-		</div>
-	</div>
-	
-	<div id="nonfictionChoicesOptions" style="display:none;">
-		<input type="text" name="subject" placeholder="Subject">
-		<select name="nonfictionSubType" onchange="selectCheckNonFictionSub(this);">
-			<option value="biography">Biography</option>
-			<option value="textbook">Textbook</option>
-			<option value="referenceMaterial">ReferenceMaterial</option>
-			<option value="magazine">Magazine</option>
-		</select>
 		
-		<div id= "biographyOptions">
-			<input type="text" name="era" placeholder="Era">
-		</div>
+		<div id="nonfictionChoicesOptions" style="display:none;">
+			<input type="text" name="subject" placeholder="Subject">
+			<select name="nonfictionSubType" onchange="selectCheckNonFictionSub(this);">
+				<option value="biography">Biography</option>
+				<option value="textbook">Textbook</option>
+				<option value="referenceMaterial">ReferenceMaterial</option>
+				<option value="magazine">Magazine</option>
+			</select>
 			
-		<div id= "magazineOptions" style="display:none;">
-			<input type="text" name="issueMagazine" placeholder="Issue">
+			<div id= "biographyOptions">
+				<input type="text" name="era" placeholder="Era">
+			</div>
+				
+			<div id= "magazineOptions" style="display:none;">
+				<input type="text" name="issueMagazine" placeholder="Issue">
+			</div>
 		</div>
+	
 	</div>
 	
-	<button type="submit" name="button" value="button1">Submit</button>
+	<div id="times">
+	
+		<input  type="date" name="openDate">
+		
+		<input  type="number" name="openHour" placeholder="Open Hour"  step="1">
+		
+		<input  type="number" name="openMinutes" placeholder="Open Minutes"  step="1">
+		
+		<input  type="date" name="closeDate">
+		
+		<input  type="number" name="closeHour" placeholder="Close Hour"  step="1">
+		
+		<input  type="number" name="closeMinutes" placeholder="Close Minutes"  step="1">
+	
+	</div>
+	
+	<div id="reservePriceDiv">
+		<input  type="number" name="reservePrice" placeholder="Reserve Price $"  step="0.01">
+	</div>
+	
+	<div id="submitButton">
+		<button type="submit" name="button" value="button1">Submit</button>
+	</div>
 </form>
 
 </body>

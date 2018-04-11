@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import java.util.TimeZone;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -135,15 +136,24 @@ public class CreateAuction extends HttpServlet {
 		      
 		      //parse open and close dates using simple date format and then create timestamps from them
 		      SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		      sdf.setTimeZone(TimeZone.getTimeZone("EST"));
 		      
 		      Date dateOpen=sdf.parse(openDate);
+		      
+		      dateOpen.setTime(dateOpen.getTime()+86400000);
+		      
+		      System.out.println("Before:" + dateOpen);
 		      
 		      dateOpen.setHours(Integer.parseInt(openHour));
 		      dateOpen.setMinutes(Integer.parseInt(openMinutes));
 		      
+		      System.out.println("After:" + dateOpen);
+		      
 		      Timestamp openTS= new Timestamp(dateOpen.getTime());
 		      
 		      Date dateClose=sdf.parse(closeDate);
+		      
+		      dateClose.setTime(dateOpen.getTime()+86400000);
 		      
 		      dateClose.setHours(Integer.parseInt(closeHour));
 		      dateClose.setMinutes(Integer.parseInt(closeMinutes));

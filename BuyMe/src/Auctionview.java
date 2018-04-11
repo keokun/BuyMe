@@ -28,6 +28,8 @@ public class Auctionview extends HttpServlet {
 		//Get the auction id from the url
 		String auctionId=(String)request.getParameter("auctionid");
 		
+		String username=(String) request.getSession().getAttribute("username");
+		
 		Connection conn = null;
 		 PreparedStatement stmt = null;
 		 
@@ -56,19 +58,24 @@ public class Auctionview extends HttpServlet {
 		    	  seller=rs.getString("seller");
 		      }
 		      
+		      if(seller.equals(username)) {
+		    	  request.setAttribute("amSeller", true);
+		      }
+		      
 
 		      Date openDate=new Date(openTs.getTime());
 		      Date closeDate=new Date(closeTs.getTime());
 		      
-		      if(openDate.getTime()>System.currentTimeMillis()) {
+		      if(openDate.after(new Date(System.currentTimeMillis()+ 3600000))) {
 		    	  request.setAttribute("active", "before");
 		      }
 		      
-		      else if (closeDate.getTime()<System.currentTimeMillis()) {
+		      else if (closeDate.before(new Date(System.currentTimeMillis()+ 3600000))) {
 		    	  request.setAttribute("active", "after");
 		      }
 		      
 		      else {
+		    	  Date d=new Date(System.currentTimeMillis()+ 3600000);
 		    	  request.setAttribute("active", "active");
 		      }
 		      
@@ -87,16 +94,20 @@ public class Auctionview extends HttpServlet {
 		      String attribute1=null;
 		      String attribute2=null;
 		      String isbn=null;
+		      String genre=null;
 		      
 		      if(rs.next()) {
 		    	  title=rs.getString("title");
 		    	  author=rs.getString("author");
 		    	  format=rs.getString("format");
+		    	  format=format.substring(0, 1).toUpperCase() + format.substring(1);
 		    	  pageCount=rs.getString("pagect");
 		    	  publisher=rs.getString("publisher");
 		    	  fictionType=rs.getBoolean("fictype");
 		    	  subcategory=rs.getString("subcat");
+		    	  subcategory=subcategory.substring(0, 1).toUpperCase() + subcategory.substring(1);
 		    	  isbn=rs.getString("isbn");
+		    	  genre=rs.getString("genre");
 		    	  
 		    	  try {
 		    		  attribute1=rs.getString("attr");
@@ -117,7 +128,7 @@ public class Auctionview extends HttpServlet {
 		      
 		      double maxBid=0.0;
 		      String maxBidUsername=null;
-		      String maxBidDate=null;
+		      Date maxBidDate=null;
 		      double maxBidAutoBid=0.0;
 		      
 		      sql= "SELECT * FROM Bid b1 WHERE b1.auctionId=" + auctionId + " AND amount IN (SELECT MAX(amount) FROM Bid b2 WHERE b2.auctionId=b1.auctionId)";
@@ -128,23 +139,16 @@ public class Auctionview extends HttpServlet {
 		      if(rs.next()) {
 		    	 maxBid=rs.getDouble("amount");
 		    	 maxBidUsername=rs.getString("username");
-		    	 maxBidDate=new Date(rs.getTimestamp("time").getTime()).toString();
+		    	 maxBidDate=new Date(rs.getTimestamp("time").getTime());
 		    	 maxBidAutoBid=rs.getDouble("maxbid");
 		      }
 		      
-		      
-		      //check max bid autobidding of bids. Increase bids if needed.
-		      
-		      //send alerts
-		      
-		      
-		      
-		      
+		     
 		      stmt.close();
 		      conn.close();
 		      
 		      if (closeDate.getTime()<System.currentTimeMillis()) {
-		    	  if(maxBid>=reservePrice) {
+		    	  if(maxBid>=reservePrice&&maxBid>0.0) {
 		    		  request.setAttribute("sold", true);
 		    	  }
 		    	  
@@ -155,8 +159,8 @@ public class Auctionview extends HttpServlet {
 		      
 		      //Set attributes for jsp
 		      
-		      request.setAttribute("openDateString", openTs.toString());
-		      request.setAttribute("closeDateString", closeTs.toString());
+		      request.setAttribute("openDate", new Date(openTs.getTime()));
+		      request.setAttribute("closeDate", new Date(closeTs.getTime()));
 		      request.setAttribute("auctionId", auctionId);
 		      request.setAttribute("reservePrice", reservePrice);
 		      request.setAttribute("seller", seller);
@@ -171,6 +175,7 @@ public class Auctionview extends HttpServlet {
 		      request.setAttribute("subcategory", subcategory);
 		      request.setAttribute("attribute1", attribute1);
 		      request.setAttribute("attribute2", attribute2);
+		      request.setAttribute("genre", genre);
 		      
 		      request.setAttribute("maxBid", maxBid);
 		      request.setAttribute("maxBidUsername", maxBidUsername);
@@ -207,7 +212,6 @@ public class Auctionview extends HttpServlet {
 		
 		String button=request.getParameter("button");
 		if(!button.equals("button1")) {
-			System.out.println("Not button");
 			doGet(request,response);
 			return;
 		}
@@ -219,9 +223,11 @@ public class Auctionview extends HttpServlet {
 		String bidAmount=(String)request.getParameter("bidAmount");
 		String biddingType=(String)request.getParameter("Autobidding");
 		String autoBidAmount=null;
-		if(biddingType.equals("autobidding"))
+		double autoBidDouble=0.0;
+		if(biddingType.equals("autobidding")) {
 			autoBidAmount=(String)request.getParameter("autoBidAmount");
-		
+			autoBidDouble=Double.parseDouble(autoBidAmount);
+		}
 		Connection conn=null;
 		PreparedStatement stmt=null;
 		
@@ -233,6 +239,9 @@ public class Auctionview extends HttpServlet {
 		      String sql;
 		      
 		      double maxBid=0.0;
+		      String maxBidUsername=null;
+		      String maxBidDate=null;
+		      double maxBidAutoBid=0.0;
 		      
 		      sql= "SELECT * FROM Bid b1 WHERE b1.auctionId=" + auctionId + " AND amount IN (SELECT MAX(amount) FROM Bid b2 WHERE b2.auctionId=b1.auctionId)";
 		      stmt=conn.prepareStatement(sql);
@@ -240,7 +249,10 @@ public class Auctionview extends HttpServlet {
 		      ResultSet rs=stmt.executeQuery();
 		      
 		      if(rs.next()) {
-		    	 maxBid=rs.getDouble("amount");
+		    	  maxBid=rs.getDouble("amount");
+			    	 maxBidUsername=rs.getString("username");
+			    	 maxBidDate=new Date(rs.getTimestamp("time").getTime()).toString();
+			    	 maxBidAutoBid=rs.getDouble("maxbid");
 		      }
 		      
 		      Double bidAmountDouble=Double.parseDouble(bidAmount);
@@ -259,8 +271,104 @@ public class Auctionview extends HttpServlet {
 		      else
 		    	  sql="INSERT INTO Bid(username,auctionid,time,amount,maxbid) VALUES ('" + username + "', " + auctionId + ", '" + currentTS
 			    		  + "', " + bidAmount + ", 0.0)";
+		      
 		      stmt=conn.prepareStatement(sql);
 		      stmt.executeUpdate();
+		      
+		      
+		      if(maxBidUsername==null) {
+		    	  
+		      }
+		      
+		      //Case0 Max bid does not have autobidding
+		      else if(maxBidAutoBid==0.0) {
+		    	  if(!username.equals(maxBidUsername)) {
+			    	  Timestamp sendTS=new Timestamp(System.currentTimeMillis());
+			    	  Timestamp expiryTS=new Timestamp(System.currentTimeMillis()+ (long)7776000000L);
+			    	  String message="Your bid on auction: " + auctionId + " for $" + maxBid + " was outbid by " + username + " who bid $" + bidAmount + ".";
+			    	  sql="INSERT INTO Message(sender, receiver, sendtime, expirytime, contents) VALUES ('forum', '" + maxBidUsername + 
+			    			  "', '" + sendTS + "', '" + expiryTS + "', '" + message + "')";
+			    	  stmt=conn.prepareStatement(sql);
+				      stmt.executeUpdate();
+			      }
+		      }
+		      
+		      //Case 1 Max bid has autobidding but its not enough
+		      else if(maxBidAutoBid<=bidAmountDouble) {
+		    	  if(!username.equals(maxBidUsername)) {
+			    	  Timestamp sendTS=new Timestamp(System.currentTimeMillis());
+			    	  Timestamp expiryTS=new Timestamp(System.currentTimeMillis()+ (long)7776000000L);
+			    	  String message="Your max auto bid on auction: " + auctionId + " for $" + maxBidAutoBid + " was outbid by " + username + " who bid $" + bidAmount + ".";
+			    	  sql="INSERT INTO Message(sender, receiver, sendtime, expirytime, contents) VALUES ('forum', '" + maxBidUsername + 
+			    			  "', '" + sendTS + "', '" + expiryTS + "', '" + message + "')";
+			    	  stmt=conn.prepareStatement(sql);
+				      stmt.executeUpdate();
+			      }
+		      }
+		      
+		    //Case 2 Max bid has autobid higher than new bid and new bid doesnt have autobid
+		      else if(maxBidAutoBid>bidAmountDouble&&autoBidAmount==null) {
+		    	  double newBidAmount=bidAmountDouble+0.01;
+		    	  
+		    	  //Original max bidder wins
+		    	  sql="INSERT INTO Bid(username,auctionid,time,amount,maxbid) VALUES ('" + maxBidUsername + "', " + auctionId + ", '" + currentTS
+			    		  + "', " + newBidAmount + ", " + maxBidAutoBid + ")";
+		    	  stmt=conn.prepareStatement(sql);
+			      stmt.executeUpdate();
+			      
+		    	  if(!username.equals(maxBidUsername)) {
+			    	  Timestamp sendTS=new Timestamp(System.currentTimeMillis());
+			    	  Timestamp expiryTS=new Timestamp(System.currentTimeMillis()+ (long)7776000000L);
+			    	  String message="Your bid on auction: " + auctionId + " for $" + bidAmount + " was outbid by " + maxBidUsername + " who bid $" + newBidAmount + ".";
+			    	  sql="INSERT INTO Message(sender, receiver, sendtime, expirytime, contents) VALUES ('forum', '" + username + 
+			    			  "', '" + sendTS + "', '" + expiryTS + "', '" + message + "')";
+			    	  stmt=conn.prepareStatement(sql);
+				      stmt.executeUpdate();
+			      }
+		    	  
+		    	  
+		      }
+		      
+		      //Case 3 Max bid has autobid higher than new bids autobid
+		      else if(maxBidAutoBid>bidAmountDouble&&maxBidAutoBid>autoBidDouble) {
+		    	  double newBidAmount=autoBidDouble+0.01;
+		    	  sql="INSERT INTO Bid(username,auctionid,time,amount,maxbid) VALUES ('" + maxBidUsername + "', " + auctionId + ", '" + currentTS
+			    		  + "', " + newBidAmount + ", " + maxBidAutoBid + ")";
+		    	  stmt=conn.prepareStatement(sql);
+			      stmt.executeUpdate();
+			      
+			      if(!username.equals(maxBidUsername)) {
+			    	  Timestamp sendTS=new Timestamp(System.currentTimeMillis());
+			    	  Timestamp expiryTS=new Timestamp(System.currentTimeMillis()+ (long)7776000000L);
+			    	  String message="Your max auto bid on auction: " + auctionId + " for $" + autoBidAmount + " was outbid by " + maxBidUsername + " who bid $" + newBidAmount + ".";
+			    	  sql="INSERT INTO Message(sender, receiver, sendtime, expirytime, contents) VALUES ('forum', '" + username + 
+			    			  "', '" + sendTS + "', '" + expiryTS + "', '" + message + "')";
+			    	  stmt=conn.prepareStatement(sql);
+				      stmt.executeUpdate();
+			      }
+		    	  
+		      }
+		      
+		      //Case 4 New bid has higher autobid
+		      
+		      else {
+		    	  double newBidAmount=maxBidAutoBid+0.01;
+		    	  sql = "INSERT INTO Bid(username,auctionid,time,amount,maxbid) VALUES ('" + username + "', " + auctionId + ", '" + currentTS
+			    		  + "', " + newBidAmount + ", " + autoBidAmount + ")";
+		    	  stmt=conn.prepareStatement(sql);
+			      stmt.executeUpdate();
+			      
+			      if(!username.equals(maxBidUsername)) {
+			    	  Timestamp sendTS=new Timestamp(System.currentTimeMillis());
+			    	  Timestamp expiryTS=new Timestamp(System.currentTimeMillis()+ (long)7776000000L);
+			    	  String message="Your max auto bid on auction: " + auctionId + " for $" + maxBidAutoBid + " was outbid by " + username + " who bid $" + newBidAmount + ".";
+			    	  sql="INSERT INTO Message(sender, receiver, sendtime, expirytime, contents) VALUES ('forum', '" + maxBidUsername + 
+			    			  "', '" + sendTS + "', '" + expiryTS + ", " + message + ")";
+			    	  stmt=conn.prepareStatement(sql);
+				      stmt.executeUpdate();
+			      }
+			      
+		      }
 		      
 		}
 		

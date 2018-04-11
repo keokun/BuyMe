@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
     pageEncoding="US-ASCII"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,7 +11,7 @@
 function selectCheckAutobidding(nameSelect) {
 	if(nameSelect) {
 		if("autobidding"==nameSelect.value) {
-			document.getElementById("autoBidDiv").style.display = "block";
+			document.getElementById("autoBidDiv").style.display = "inline-block";
 		}
 		
 		else {
@@ -47,6 +48,87 @@ function validateForm() {
 
 </script>
 
+<style>
+
+h1 {
+	text-align: center;
+}
+
+#author {
+	text-align: center;
+}
+
+#seller {
+	margin-top: 5px;
+	text-align: center;
+}
+
+#dates {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#details {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#itemSold {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#itemNotSold {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#maxBidDetails {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#bid {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#bidAmountDiv {
+	display: inline-block;
+}
+
+#autoBiddingDiv {
+	display: inline-block;
+}
+
+#autoBidDiv {
+	display: inline-block;
+}
+
+
+#auctionNotBegun {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#submitButton {
+	margin-top: 10px;
+	text-align: center;
+}
+
+#amSellerDiv {
+	margin-top: 10px;
+	text-align: center;
+}
+
+table.center {
+    margin-left:auto; 
+    margin-right:auto;
+    border-collapse: separate;
+  	border-spacing: 25px 0;
+  }
+
+</style>
 
 <title>Auction ${auctionId}</title>
 </head>
@@ -59,21 +141,23 @@ function validateForm() {
 </div>
 
 <div id="seller">
-	<p>
 	
-	Seller: ${seller}
-	
-	</p>
+	Sold By: ${seller}
+
 </div>
 
 <div id="dates">
-	<p>
-	OpenDate: ${openDateString}
-	
-	<br>
-	
-	CloseDate: ${closeDateString}
-	</p>
+	<table class="center">
+		<tr>
+			<td>
+				Open Date: <fmt:formatDate type = "both" dateStyle = "long" timeStyle = "medium" value = "${openDate}" />
+			</td>
+			
+			<td>
+			Close Date: <fmt:formatDate type = "both" dateStyle = "long" timeStyle = "medium" value = "${closeDate}" />
+			</td>
+		</tr>
+	</table>
 </div>
 
 <div id="details">
@@ -92,34 +176,60 @@ function validateForm() {
 			
 			<br>
 			
-			PageCount: ${pageCount}
+			Page Count: ${pageCount}
 			
 		</c:if>
 		
 		<br>
 		
-		publisher: ${publisher}
+		Publisher: ${publisher}
 		
 		<br>
 		
-		${subcategory}
+		Sub-category: ${subcategory}
+		
+		<br>
+		
+		<c:if test="${fictionType}">
+				Genre: ${genre}
+		</c:if>
+		
+		<c:if test="${not fictionType}">
+				Subject: ${genre}
+		</c:if>
 		
 		<br>
 		
 		<c:if test="${not empty attribute1}">
-		    ${attribute1}
+			<c:if test="${subcategory == 'Comics'}">
+				Volume: ${attribute1}
+			</c:if>
+			<c:if test="${subcategory == 'Poetry'}">
+				Style: ${attribute1}
+			</c:if>
+			<c:if test="${subcategory == 'Anthology'}">
+				Editors: ${attribute1}
+			</c:if>
+		    <c:if test="${subcategory == 'Biography'}">
+				Era: ${attribute1}
+			</c:if>
+			<c:if test="${subcategory == 'Magazine'}">
+				Issue: ${attribute1}
+			</c:if>
 		    <br>
 		</c:if>
 		
 		<c:if test="${not empty attribute2}">
-		    ${attribute2}
+			<c:if test="${subcategory == 'Comics'}">
+				Issue: ${attribute1}
+			</c:if>
 		</c:if>
 	
 	</p>
 
 </div>
 
-<c:if test="${active == 'active'}">
+<c:if test="${active == 'active' && not amSeller}">
 	<div id="maxBidDetails" >
 		<p>
 			<c:if test="${not empty maxBidUsername}">
@@ -128,15 +238,15 @@ function validateForm() {
 						Max Bid: 
 					</td>
 					<td>
-						${maxBidUsername}
+						By ${maxBidUsername} for
 					</td>
 					
 					<td>
-						${maxBid}
+						$<fmt:formatNumber type = "number" maxFractionDigits = "2" minFractionDigits = "2" value = "${maxBid}" />
 					</td>
 					
 					<td>
-						${maxBidDate}
+						on <fmt:formatDate type = "both" dateStyle = "long" timeStyle = "medium" value = "${maxBidDate}" />
 					</td>
 				</tr>
 			</c:if>
@@ -145,26 +255,67 @@ function validateForm() {
 			</c:if>
 		</p>
 	</div>
-
-
-	<div id="bid">
-		<form name="bidForm" action="${pageContext.request.contextPath}/auctionview?auctionid=${param.auctionid}" onsubmit="return validateForm()" method="post">
-			<input  type="number" name="bidAmount" placeholder="Bid Amount $"  step="0.01">
+	
+		<div id="bid">
+			<form name="bidForm" action="${pageContext.request.contextPath}/auctionview?auctionid=${param.auctionid}" onsubmit="return validateForm()" method="post">
+				<div id="bidAmountDiv">
+					<input  type="number" name="bidAmount" placeholder="Bid Amount $"  step="0.01">
+				</div>
+				
+				<div id="autoBiddingDiv">
+					<select name="Autobidding" onChange="selectCheckAutobidding(this)">
+						<option value="autobidding">Autobidding</option>
+						<option value="manual">Manual</option>
+					</select>
+				</div>
+				
+				<div id="autoBidDiv">
+					<input  type="number" name="autoBidAmount" placeholder="Max Autobid Amount $"  step="0.01">
+				</div>
+				
+				<div id="submitButton">
+					<button type="submit" name="button" value="button1">Submit</button>
+				</div>
 			
-			<select name="Autobidding" onChange="selectCheckAutobidding(this)">
-				<option value="autobidding">Autobidding</option>
-				<option value="manual">Manual</option>
-			</select>
-			
-			<div id="autoBidDiv">
-				<input  type="number" name="autoBidAmount" placeholder="Max Autobid Amount $"  step="0.01">
-			</div>
-			
-			<button type="submit" name="button" value="button1">Submit</button>
-		
-		</form>
-	</div>
+			</form>
+		</div>
+	
 </c:if>
+
+<c:if test="${active == 'active' && amSeller}">
+	<div id="maxBidDetails" >
+		<p>
+			<c:if test="${not empty maxBidUsername}">
+				<tr>
+					<td>
+						Max Bid: 
+					</td>
+					<td>
+						By ${maxBidUsername} for
+					</td>
+					
+					<td>
+						$<fmt:formatNumber type = "number" maxFractionDigits = "2" minFractionDigits = "2" value = "${maxBid}" />
+					</td>
+					
+					<td>
+						on <fmt:formatDate type = "both" dateStyle = "long" timeStyle = "medium" value = "${maxBidDate}" />
+					</td>
+				</tr>
+			</c:if>
+			<c:if test="${empty maxBidUsername}">
+				No bids submitted
+			</c:if>
+		</p>
+	</div>
+	
+	<div id=amSellerDiv>
+		Your are the seller of this item and cannot bid.
+	</div>	
+	
+</c:if>
+
+
 
 <div id="auctionNotBegun">
 	<c:if test="${active == 'before'}">
@@ -185,7 +336,6 @@ function validateForm() {
 		The item was not sold because no bid met the reserve price of $${reservePrice}
 	</c:if>
 </div>
-
 
 
 
