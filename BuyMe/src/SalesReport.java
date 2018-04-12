@@ -37,14 +37,15 @@ public class SalesReport extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		/* If we are looking for sales report*/
-		if (request.getParameter("SReport") != null)
+		if (request.getParameter("rtype") != null)
 		{
 			
-			String reportType = request.getParameter("SReport");
+			String reportType = request.getParameter("rtype");
 			String sql = "";
 			Connection conn = null;
 			PreparedStatement stmt = null;
 			String timeStamp;
+			String stat = "error";
 			 
 			 try{
 			      Class.forName("com.mysql.jdbc.Driver");
@@ -55,7 +56,7 @@ public class SalesReport extends HttpServlet {
 			      java.util.Date date = new java.util.Date();
 			      Timestamp currTime = new Timestamp(date.getTime());
 			      
-			      String stat = null;
+			      
 			     
 			      switch (reportType)
 					{
@@ -157,39 +158,71 @@ public class SalesReport extends HttpServlet {
 
 						default:
 							response.sendError(HttpServletResponse.SC_NOT_FOUND);
-							break;
+							return;
+							
 					}
 			      
 			      stmt=conn.prepareStatement(sql);
 			      ResultSet rs = stmt.executeQuery();
 			      
-			      List<Float> sumarr = new ArrayList<Float>();
-			      List<String> cat = new ArrayList<String>();
+
+			      List<ReportItem> reps = new ArrayList<ReportItem>();
 			      
+			      
+			      if (stat.equals("error"))
+			      {
+			    	  request.setAttribute("sres", false);
+			    	  request.getRequestDispatcher("/jsps/adminpage.jsp").forward(request, response);
+			      }
 			      
 			      /* iterate over the result set and store into a list*/
 			      while(rs.next())
 			      {
-			    	  sumarr.add(rs.getFloat("res"));
-			    	  cat.add(rs.getString(stat));
+			    	  //Each index gets a 'stat', which is the category we're organizing by
+			    	  //and a sum of sales for that stat
 			    	  
+			    	  float result = rs.getFloat("res");
+			    	  String str = rs.getString(stat);
+			    	  
+			    	  ReportItem ri = new ReportItem(result,str);
+			    	  reps.add(ri);
 			    	  
 			      }
 			      
+			  
 
 			      stmt.close();
 			      conn.close();
 			      
 			      /* On Success*/
-			      request.setAttribute("success", true);
+			      
+			      request.setAttribute("sres", true);
+			      request.setAttribute("salestable", reps);
+			      
+			      //If we are getting earnings of a particular category
+			      if (!(reportType.equals("TotEarn")))
+		    	  {
+		    	  	request.setAttribute("cat", stat);
+		    	  	request.setAttribute("justSum", false);
+		    	  }
+			      
+			      //If we are just getting total earnings
+			      else
+			      {
+			    	  request.setAttribute("justSum",true);
+			      }
+			      
 			      request.getRequestDispatcher("/jsps/adminpage.jsp").forward(request, response);	
 		    	
 			      
 		    	  /* On Failure*/
 			      
-			   }catch(SQLException se){
+			   }
+			 
+			 
+			 catch(SQLException se){
 			      se.printStackTrace();
-			      request.setAttribute("success",false);
+			      request.setAttribute("sres",false);
 			      request.getRequestDispatcher("/jsps/adminpage.jsp").forward(request, response);	
 			   }catch(Exception e){
 			      e.printStackTrace();
@@ -208,6 +241,12 @@ public class SalesReport extends HttpServlet {
 			   }
 			
 			
+		}
+		
+		else
+		{
+			request.setAttribute("sres", false);
+			request.getRequestDispatcher("/jsps/adminpage.jsp").forward(request, response);
 		}
 		
 	
