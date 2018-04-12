@@ -57,20 +57,79 @@ h2 {text-align:left;}
 <br>
 <h3>Sales Reports</h3>
 <form action="${pageContext.request.contextPath}/SalesReport" method="post">
-  <select name="SReport">
-    <option value="TotEarn">Total Earnings</option>
-    <option value="EpItem">Earnings per item</option>
-    <option value="EpItemType">Earnings per item type</option>
-    <option value="EpEndUser">Earnings per end-user</option>
-    <option value="BSitems">Best-Selling Items</option>
-    <option value="BBuyers">Best Buyers</option>
-  </select>
-  <input type="submit" name=SubSale value="Get Report">
+
+    <input type= "radio" name = "rtype" value = "TotEarn">Total Earnings
+    <br>
+    <input type= "radio" name = "rtype" value = "EpItem">Earnings per item
+    <br>
+    <input type= "radio" name = "rtype" value = "EpItemType">Earnings per item type
+    <br>
+    <input type= "radio" name = "rtype" value = "EpEndUser">Earnings per end-user
+    <br>
+    <input type= "radio" name = "rtype" value = "BSitems">Best-Selling Items
+    <br>
+    <input type= "radio" name = "rtype" value = "BBuyers">Best Buyers 
+    <br>
+
+
+
+    <input type="submit" value=Submit>
+
 </form>
 
+<c:if test = "${not empty sres}">
+	<c:if test = "${sres}">
+		<text> SalesReport Retrieval Success! </text>
+		
+		<br>
+		
+		<%--If we are just taking the earnings --%>
+		<c:if test = "${justSum}">
+		
+			<%--Just display the earnings --%>
+			<text>Total Earnings</text>
+			
+			
+			<c:forEach items = "${salestable}" var = "sitem">
+				<tr>
+					<td>${sitem.res}</td>
+				</tr>
+			</c:forEach>
+			
+			
+		</c:if>
+		
+		<%--If we are taking earnings of specific categories --%>
+		<c:if test = "${not justSum}">
+		
+			<table>
+				<TH> Earnings </TH>
+				<TH> <%request.getAttribute("cat"); %></TH>
+				
+				
+				<c:forEach items = "${salestable}" var = "sitem">
+					<tr>
+						<td>${sitem.res}</td>
+						<td>${sitem.stat}</td>
+					</tr>
+				</c:forEach>
+				
+				
+			</table>	
+			
+		</c:if>
+
+	
+	
+	</c:if>
+	
+	<c:if test = "${not sres }">
+		<text> SalesReport Retrieval Failure. </text>
+	</c:if>
+
+</c:if>
 
 
-</form>
 
 
 <a href="${pageContext.request.contextPath}/home">Logout</a>
