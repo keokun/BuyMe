@@ -22,8 +22,6 @@ h2 {text-align:center;}
 <title>Buy Me</title>
 </head>
 
-<a href="${pageContext.request.contextPath}/home">Back to home</a>
-
 <h1>Login</h1>
 <br>
 <br>

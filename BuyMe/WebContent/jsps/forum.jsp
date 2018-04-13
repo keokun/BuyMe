@@ -9,12 +9,41 @@
 <style>
 h1 {text-align:center;}
 h2 {text-align:left;}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
 </style>
 
 <title>Forum Page</title>
 </head>
 <body>
 
+<div id="navBar">
+<ul>
+	<li><a href="${pageContext.request.contextPath}/logout">Logout</a> </li>
+	<li><a href="${pageContext.request.contextPath}/createauction">Create Auction</a></li>
+	<li><a href="${pageContext.request.contextPath}/browse">Browse</a></li>
+	<li><a href="${pageContext.request.contextPath}/Forum">Forum</a></li>
+	<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+</ul>
+</div>
 
 <h1> Welcome to the BuyMe Forum!</h1>
 <br>
@@ -239,11 +268,6 @@ h2 {text-align:left;}
 		
 		
 <br>
-<br>
-<a href="${pageContext.request.contextPath}/home">Logout</a>		
-		
-
-
-
+<br>		
 </body>
 </html>
