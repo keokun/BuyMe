@@ -18,7 +18,7 @@ table, th, td {padding:15px;}
 <body>
 
 <h1>Browse Auctions</h1>
-<b><a href="${pageContext.request.contextPath}/advsearch.jsp">Advanced Search</a></b><br>
+<b><a href="${pageContext.request.contextPath}/jsps/advsearch.jsp">Advanced Search</a></b><br>
 <br>
 
 <b>Sort Auctions</b>
@@ -37,7 +37,7 @@ table, th, td {padding:15px;}
 <c:forEach items="${sr}" var="r">
 	<tr>
 		<td>
-			Auction ID #${r.auctionID}
+			<a href="${pageContext.request.contextPath}/auctionview?auctionid=${r.auctionID}">Auction ID #${r.auctionID}</a>
 			<h3>${r.title}</h3>
 			<b>By ${r.author}</b><br>
 			Sold by ${r.seller}<br>

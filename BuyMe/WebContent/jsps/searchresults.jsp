@@ -7,7 +7,7 @@
 <%--Kristen created this page --%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Browse Auctions</title>
+<title>Advanced Search: Results</title>
 <style>
 h1 {text-align:center;}
 h3 {font-weight:bold; font-style:italic; padding:0px; margin:0px;}
@@ -17,24 +17,11 @@ table, th, td {padding:15px;}
 
 <body>
 
-<h1>Browse Auctions</h1>
-<b><a href="${pageContext.request.contextPath}/jsps/advsearch.jsp">Advanced Search</a></b><br>
+<h1>Advanced Search: Results</h1>
+<b><a href="${pageContext.request.contextPath}/jsps/advsearch.jsp">New Search</a> | <a href="${pageContext.request.contextPath}/browse">Browse All Auctions</a></b><br>
 <br>
-
-<b>Sort Auctions</b>
-<form method="get" action="${pageContext.request.contextPath}/sortby">
-	<select name="sort">
-		<option id="no" value="no">None</option>
-		<option id="plh" value="plh">Price: Low to High</option>
-		<option id="phl" value="phl">Price: High to Low</option>
-		<option id="btype" value="btype">Book Type</option>
-	</select>
-	<input type="submit" name="Sort" value="Sort">
-</form>
-
+<i>Results found: ${count}</i>
 <br>
-${sb}
-
 <table>
 <c:forEach items="${sr}" var="r">
 	<tr>
