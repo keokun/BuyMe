@@ -12,11 +12,36 @@
 h1 {text-align:center;}
 h3 {font-weight:bold; font-style:italic; padding:0px; margin:0px;}
 table, th, td {padding:15px;}
+a { text-decoration: none; }
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+li { float: right; }
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+li a:hover { background-color: #111; }
 </style>
 </head>
 
 <body>
-
+<div id="navBar">
+<ul>
+	<li><a href="${pageContext.request.contextPath}/logout">Logout</a> </li>
+	<li><a href="${pageContext.request.contextPath}/createauction">Create Auction</a></li>
+	<li><a href="${pageContext.request.contextPath}/browse">Browse</a></li>
+	<li><a href="${pageContext.request.contextPath}/Forum">Forum</a></li>
+	<li><a href="${pageContext.request.contextPath}/jsps/home.jsp">Home</a></li>
+</ul>
+</div>
 <h1>Browse Auctions</h1>
 <b><a href="${pageContext.request.contextPath}/jsps/advsearch.jsp">Advanced Search</a></b><br>
 <br>
@@ -40,7 +65,7 @@ table, th, td {padding:15px;}
 			<a href="${pageContext.request.contextPath}/auctionview?auctionid=${r.auctionID}">Auction ID #${r.auctionID}</a>
 			<h3>${r.title}</h3>
 			<b>By ${r.author}</b><br>
-			Sold by ${r.seller}<br>
+			Sold by <a href="${pageContext.request.contextPath}/AuctionHistory?username=${r.seller}">${r.seller}</a><br>
 			Current bid: <fmt:formatNumber type="CURRENCY">${r.price}</fmt:formatNumber><br>
 		</td>
 	</tr>
