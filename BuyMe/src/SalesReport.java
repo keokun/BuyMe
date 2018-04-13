@@ -51,6 +51,7 @@ public class SalesReport extends HttpServlet {
 			      Class.forName("com.mysql.jdbc.Driver");
 
 			      conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
+			  
 			      
 			      /* Obtain every auction whose endpoint is before the current timestamp*/
 			      java.util.Date date = new java.util.Date();
@@ -61,98 +62,68 @@ public class SalesReport extends HttpServlet {
 			      switch (reportType)
 					{
 						case "TotEarn":
-							sql = 
-								//the sum of the amounts sold
-								"SELECT SUM(ps.sold) AS res"
-									+ "FROM ("
-										+ "SELECT max(amount) AS sold,endtime"
-										+ "FROM Bid B, Auction A "
-										+ "WHERE B.auctionid = A.auctionid AND endtime < ? AND sold > A.reserve"
-										+ "GROUP BY auctionid"
-									+ ")ps";
 							
-							stmt.setTimestamp(1, currTime);
 							
-							stat = "sum";
+							sql="SELECT SUM(B.amount) AS res" + 
+									" FROM Bid B, Auction A" + 
+									" WHERE B.auctionid = A.auctionid AND B.amount > A.reserve AND A.endtime < '" + currTime + "' AND B.amount IN (SELECT MAX(b2.amount)"
+									+ " FROM Bid b2 WHERE b2.auctionid=A.auctionid)";
+							
+							stmt=conn.prepareStatement(sql);
+							
+							stat = null;
 							
 							break;
 							
 						case "EpItemType":
-							sql = 
-								//getting the sum of amounts sold for each genre 
-								"SELECT SUM(ps.sold) AS res, genre "
-									//getting the price sold of every book that's been on auction
-									//organized by different auctions
-									+ "FROM ("
-										+ "SELECT MAX(amount) AS sold,endtime genre"
-										+ "FROM Bid B, Auction A "
-										+ "WHERE B.auctionid = A.auctionid AND endtime < ? AND sold > A.reserve"
-										+ "GROUP BY auctionid"
-									+ ") ps"
-
-								+ "GROUP BY ps.genre";
-							stmt.setTimestamp(1, currTime);
 							
-							stat = "genre";
+							sql="SELECT sum(amount) AS res, J.subcat " + 
+									"FROM Bid B, Auction A, Book J " + 
+									"WHERE B.auctionid = A.auctionid AND B.auctionid=J.auctionid AND B.amount > A.reserve AND A.endtime < '" + currTime + "' AND B.amount IN (SELECT MAX(b2.amount) FROM Bid b2 WHERE b2.auctionid=A.auctionid) " + 
+									"GROUP BY J.subcat Order BY Res DESC";
+							
+							
+							
+							stat = "subcat";
 							
 							break;
 							
 							
 						case "EpItem":
-							sql =  
-									//getting the sum of amounts sold for each book 
-									"SELECT SUM(ps.sold) AS res, ISBN "
-										//getting the price sold of every book that's been on auction
-										//organized by different auctions
-										+ "FROM ("
-											+ "SELECT MAX(amount) AS sold,endtime, ISBN"
-											+ "FROM Bid B, Auction A "
-											+ "WHERE B.auctionid = A.auctionid AND endtime < ? AND sold > A.reserve"
-											+ "GROUP BY auctionid"
-										+ ") ps"
-
-									+ "GROUP BY ps.ISBN";
-							stmt.setTimestamp(1, currTime);
+							sql="SELECT sum(amount) AS res, J.isbn, J.title " + 
+									"FROM Bid B, Auction A, Book J " + 
+									"WHERE B.auctionid = A.auctionid AND B.auctionid=J.auctionid AND B.amount > A.reserve AND A.endtime < '" + currTime + "' AND B.amount IN (SELECT MAX(b2.amount) FROM Bid b2 WHERE b2.auctionid=A.auctionid) " + 
+									"GROUP BY J.isbn Order BY Res DESC";
 							
-							stat = "ISBN";
+							stat = "isbn";
 							
 							break;
 						case "EpEndUser":
-							sql = 
-								//getting the sum of amounts sold for each genre 
-								"SELECT SUM(ps.sold) AS res,seller "
-									//getting the price sold of every book that's been on auction
-									//organized by different auctions
-									+ "FROM ("
-										+ "SELECT MAX(amount) AS sold,endtime, seller"
-										+ "FROM Bid B, Auction A "
-										+ "WHERE B.auctionid = A.auctionid AND endtime < ? AND sold > A.reserve"
-										+ "GROUP BY auctionid"
-									+ ") ps"
-	
-								+ "GROUP BY ps.seller";
-							stmt.setTimestamp(1, currTime);
+							sql="SELECT sum(amount) AS res, A.seller " + 
+									"FROM Bid B, Auction A, Book J " + 
+									"WHERE B.auctionid = A.auctionid AND B.auctionid=J.auctionid AND B.amount > A.reserve AND A.endtime < '" + currTime + "' AND B.amount IN (SELECT MAX(b2.amount) FROM Bid b2 WHERE b2.auctionid=A.auctionid) " + 
+									"GROUP BY A.seller Order BY Res DESC";
 							stat = "seller";
 
 							break;
 							
 						case "BBuyers":
-							sql = 
-									//getting the sum of amounts sold for each genre 
-									"SELECT SUM(ps.sold) AS res,username "
-										//getting the price sold of every book that's been on auction
-										//organized by different auctions
-										+ "FROM ("
-											+ "SELECT MAX(amount) AS sold,endtime, username"
-											+ "FROM Bid B, Auction A "
-											+ "WHERE B.auctionid = A.auctionid AND endtime < ? AND sold > A.reserve"
-											+ "GROUP BY auctionid"
-										+ ") ps"
-		
-									+ "GROUP BY ps.username";
+							sql="SELECT sum(amount) AS res, B.username " + 
+									"FROM Bid B, Auction A, Book J " + 
+									"WHERE B.auctionid = A.auctionid AND B.auctionid=J.auctionid AND B.amount > A.reserve AND A.endtime < '" + currTime + "' AND B.amount IN (SELECT MAX(b2.amount) FROM Bid b2 WHERE b2.auctionid=A.auctionid) " + 
+									"GROUP BY B.username Order BY Res DESC";
 							stat = "username";
 							
-							stmt.setTimestamp(1, currTime);
+							break;
+							
+						case "BSitems":
+							sql="SELECT count(*) AS res, J.isbn " + 
+									"FROM Bid B, Auction A, Book J " + 
+									"WHERE B.auctionid = A.auctionid AND B.auctionid=J.auctionid AND B.amount > A.reserve AND A.endtime < '" + currTime + "' AND B.amount IN (SELECT MAX(b2.amount) FROM Bid b2 WHERE b2.auctionid=A.auctionid) " + 
+									"GROUP BY J.isbn Order BY Res DESC";
+							stat = "isbn";
+							
+							
 							break;
 							
 
@@ -169,7 +140,7 @@ public class SalesReport extends HttpServlet {
 			      List<ReportItem> reps = new ArrayList<ReportItem>();
 			      
 			      
-			      if (stat.equals("error"))
+			      if (stat!=null&&stat.equals("error"))
 			      {
 			    	  request.setAttribute("sres", false);
 			    	  request.getRequestDispatcher("/jsps/adminpage.jsp").forward(request, response);
@@ -182,7 +153,10 @@ public class SalesReport extends HttpServlet {
 			    	  //and a sum of sales for that stat
 			    	  
 			    	  float result = rs.getFloat("res");
-			    	  String str = rs.getString(stat);
+			    	  String str=null;
+			    	  if(stat!=null) {
+			    		  str=rs.getString(stat);
+			    	  }
 			    	  
 			    	  ReportItem ri = new ReportItem(result,str);
 			    	  reps.add(ri);
