@@ -49,7 +49,7 @@ li a {
 
 	<%-- If we are able to get history, printout  --%>
 	<c:if test = "${success}">
-		<text>Auction History For ${param.user}</text>
+		<h1>Auction History For ${param.user}</h1>
 		<br>
 		
 		<text><%
@@ -121,10 +121,10 @@ li a {
 <c:if test= "${not empty bidsuccess }">
 	
 	<c:if test= "${bidsuccess }">
-	<text>Bid History for Auction ${param.auctionid}</text>
+	<h1>Bid History for Auction ${param.auctionid}</h1>
 		<br>
 		<br>
-		<text>Bid History <% int numq = (int)request.getAttribute("newsize");
+		<text><% int numq = (int)request.getAttribute("newsize");
 										if (numq > 1)
 										{
 											out.print(numq + " bids\n");
