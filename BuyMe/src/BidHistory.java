@@ -33,93 +33,90 @@ public class BidHistory extends HttpServlet {
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/jsps/history.jsp").forward(request, response);
+		String auction = request.getParameter("auctionid");
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		try{
+			
+			Class.forName("com.mysql.jdbc.Driver");
+
+			conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
+			String sql;
+		
+			/* Get auction and books where the bid is made by the user*/
+			sql = "SELECT * FROM Bid B , Auction A, Book C WHERE A.auctionid =" + auction + ""
+					+ " AND A.auctionid = B.auctionid AND B.auctionid = C.auctionid ";
+			
+			stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			
+			List<BidObject> bol = new ArrayList<BidObject>();
+			List<Timestamp> tsl = new ArrayList<Timestamp>();
+			
+			while(rs.next())
+			{
+				Timestamp ts = rs.getTimestamp("time");
+		    	
+				//just trying to filter out the duplicates
+				if (!tsl.contains(ts))
+				{
+					tsl.add(ts);
+					float amount = rs.getFloat("amount");
+					float maxbid = rs.getFloat("maxbid");
+					String seller = rs.getString("seller");
+					String book = rs.getString("title");
+					
+					BidObject element = new BidObject(ts,amount,maxbid,seller,book);
+					
+					bol.add(element);
+				}
+		    
+			}
+			
+			/* On SUCCESS */
+			
+			int newsize = bol.size();
+			
+			
+			request.setAttribute("bidsuccess", true);
+			request.setAttribute("newsize", newsize);
+			request.setAttribute("bidtable",bol);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/history.jsp");
+			dispatcher.forward(request, response);	
+			
+		}
+		
+		catch(SQLException se){
+		      se.printStackTrace();
+		      request.setAttribute("bidsuccess",false);
+		      request.getRequestDispatcher("/jsps/history.jsp").forward(request, response);	
+		   }catch(Exception e){
+		      e.printStackTrace();
+		   }
+		
+		finally{
+		      try{
+		         if(stmt!=null)
+		            stmt.close();
+		      }catch(SQLException se2){
+		      }
+		      try{
+		         if(conn!=null)
+		            conn.close();
+		      }catch(SQLException se){
+		         se.printStackTrace();
+		      }
+		   }
+	
+
 	}//End doGet
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-			
+		doGet(request,response);
 	
-			int auction = Integer.parseInt(request.getParameter("auction"));
-			
-			Connection conn = null;
-			PreparedStatement stmt = null;
-			
-			try{
-				
-				Class.forName("com.mysql.jdbc.Driver");
-	
-				conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
-				String sql;
-			
-				/* Get auction and books where the bid is made by the user*/
-				sql = "SELECT * FROM Bid B , Auction A, Book C WHERE A.auctionid = '" + auction + "' , "
-						+ " AND A.auctionid = B.auctionid AND B.auctionid = C.auctionid ";
-				
-				stmt = conn.prepareStatement(sql);
-				ResultSet rs = stmt.executeQuery();
-				
-				List<BidObject> bol = new ArrayList<BidObject>();
-				List<Timestamp> tsl = new ArrayList<Timestamp>();
-				
-				while(rs.next())
-				{
-					Timestamp ts = rs.getTimestamp("time");
-			    	
-					//just trying to filter out the duplicates
-					if (!tsl.contains(ts))
-					{
-						tsl.add(ts);
-						float amount = rs.getFloat("amount");
-						float maxbid = rs.getFloat("maxbid");
-						String seller = rs.getString("seller");
-						String book = rs.getString("title");
-						
-						BidObject element = new BidObject(ts,amount,maxbid,seller,book);
-						
-						bol.add(element);
-					}
-			    
-				}
-				
-				/* On SUCCESS */
-				
-				int newsize = bol.size();
-				
-				
-				request.setAttribute("bidsuccess", true);
-				request.setAttribute("newsize", newsize);
-				request.setAttribute("bidtable",bol);
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/history.jsp");
-				dispatcher.forward(request, response);	
-				
-			}
-			
-			catch(SQLException se){
-			      se.printStackTrace();
-			      request.setAttribute("bidsuccess",false);
-			      request.getRequestDispatcher("/jsps/history.jsp").forward(request, response);	
-			   }catch(Exception e){
-			      e.printStackTrace();
-			   }
-			
-			finally{
-			      try{
-			         if(stmt!=null)
-			            stmt.close();
-			      }catch(SQLException se2){
-			      }
-			      try{
-			         if(conn!=null)
-			            conn.close();
-			      }catch(SQLException se){
-			         se.printStackTrace();
-			      }
-			   }
-		
-		
-		
 		
 	}//End doPost
 	

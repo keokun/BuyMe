@@ -28,18 +28,13 @@ public class AuctionHistory extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/jsps/history.jsp").forward(request, response);
-	}//End doGet
-	
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
 		String username;
 		String button = request.getParameter("button");
 		
+		String user=request.getParameter("user");
+		
 		//auctionhistory of the user currently logged in.
-		if(("auctionH").equals(button))
+		/*if(("auctionH").equals(button))
 		{
 			username = (String) request.getSession().getAttribute("username");
 			Connection conn = null;
@@ -134,13 +129,13 @@ public class AuctionHistory extends HttpServlet {
 		}//end auctionH
 		
 		//else if we have the username of the person passed in through the URL
-		else
+		else*/
 		{
 			Connection conn = null;
 			PreparedStatement stmt = null;
 			
 			try{
-				username = request.getParameter("username");
+				//username = request.getParameter("username");
 			      Class.forName("com.mysql.jdbc.Driver");
 
 			      conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
@@ -151,8 +146,8 @@ public class AuctionHistory extends HttpServlet {
 			      Timestamp currTime = new Timestamp(date.getTime());	
 			      
 			      //get all auctions where i
-			      sql = "SELECT * FROM Auction A, Bid B, Book C WHERE ((A.seller = '" + username + "' AND A.auctionid = C.auctionid) "
-			      		+ "OR (B.username = '" + username + "' "
+			      sql = "SELECT * FROM Auction A, Bid B, Book C WHERE ((A.seller = '" + user + "' AND A.auctionid = C.auctionid) "
+			      		+ "OR (B.username = '" + user + "' "
 			      		+ " AND B.auctionid = A.auctionid AND B.auctionid = C.auctionid)) AND endtime < ?";
 			      
 			      //prep the sql statement
@@ -194,7 +189,7 @@ public class AuctionHistory extends HttpServlet {
 			      request.setAttribute("success", true);
 			      request.setAttribute("ahtable", lao);
 			      request.setAttribute("newsize", newsize);
-			      request.setAttribute("username", username);
+			      request.setAttribute("username", user);
 			      RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/history.jsp");
 		    	  dispatcher.forward(request,response);
 			      
@@ -227,7 +222,12 @@ public class AuctionHistory extends HttpServlet {
 			
 			
 		}
+	}//End doGet
+	
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		doGet(request,response);
 		
 	}//End doPost
 	

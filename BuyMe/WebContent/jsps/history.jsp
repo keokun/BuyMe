@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -88,7 +89,7 @@
 <c:if test= "${not empty bidsuccess }">
 	
 	<c:if test= "${bidsuccess }">
-	<text>Bid History Retrieval Success!</text>
+	<text>Bid History for Auction ${param.auctionid}</text>
 		<br>
 		<br>
 		<text>Bid History <% int numq = (int)request.getAttribute("newsize");
@@ -117,26 +118,13 @@
 				</tr>
 				
 				<tr>
-					To: <c:out value= "${bid.amount}"/>
+					Amount Bid: $<fmt:formatNumber type = "number" maxFractionDigits = "2" minFractionDigits = "2" value = "${bid.amount}"/>
 					<%out.println("<br>"); %>
 				</tr>
 				
 				<tr>
-					<c:out value= "${bid.maxbid}"/>
+					Max Auto Bid $<fmt:formatNumber type = "number" maxFractionDigits = "2" minFractionDigits = "2" value = "${bid.maxbid}"/>
 					<%out.println("<br>"); %>
-				</tr>
-				
-				<tr>
-					<c:out value= "${bid.book}"/>
-					<%out.println("<br>"); %>
-				</tr>
-				
-				<tr>
-				
-					<c:out value= "${bid.seller}"/>
-					
-					<%out.println("<br><br>"); %>
-					
 				</tr>
 		
 			</c:forEach>
