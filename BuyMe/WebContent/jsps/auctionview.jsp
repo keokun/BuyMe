@@ -127,12 +127,47 @@ table.center {
     border-collapse: separate;
   	border-spacing: 25px 0;
   }
+  
+  
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
 
 </style>
 
 <title>Auction ${auctionId}</title>
+<link rel="import" href="navBar.html">
 </head>
 <body>
+<div id="navBar">
+<ul>
+	<li><a href="${pageContext.request.contextPath}/logout">Logout</a> </li>
+	<li><a href="${pageContext.request.contextPath}/createauction">Create Auction</a></li>
+	<li><a href="${pageContext.request.contextPath}/browse">Browse</a></li>
+	<li><a href="${pageContext.request.contextPath}/Forum">Forum</a></li>
+	<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+</ul>
+</div>
 
 <h1>${title}</h1>
 

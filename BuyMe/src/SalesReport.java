@@ -58,9 +58,7 @@ public class SalesReport extends HttpServlet {
 			      Timestamp currTime = new Timestamp(System.currentTimeMillis()+ 3600000);
 			      
 			     // currTime.setTime(currTime);
-			      
-			      
-			      
+			     
 			     
 			      switch (reportType)
 					{
