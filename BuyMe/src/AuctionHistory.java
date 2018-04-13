@@ -18,7 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+@WebServlet("/AuctionHistory")
 public class AuctionHistory extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -28,19 +28,20 @@ public class AuctionHistory extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/jsps/auctionhistory.jsp").forward(request, response);
+		request.getRequestDispatcher("/jsps/history.jsp").forward(request, response);
 	}//End doGet
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String username = (String) request.getSession().getAttribute("username");
+		
 		
 		String button = request.getParameter("button");
 		
 		//auctionhistory of the user currently logged in.
 		if(("auctionH").equals(button))
 		{
+			String username = (String) request.getSession().getAttribute("username");
 			Connection conn = null;
 			PreparedStatement stmt = null;
 			
@@ -55,7 +56,9 @@ public class AuctionHistory extends HttpServlet {
 			      Timestamp currTime = new Timestamp(date.getTime());	
 			      
 			      //get all auctions where i
-			      sql = "SELECT * FROM Auction A, Bid B WHERE (A.seller = '" + username + "' OR ) AND endtime <= ?";
+			      sql = "SELECT * FROM Auction A, Bid B, Book C WHERE ((A.seller = '" + username + "' AND A.auctionid = C.auctionid) "
+			      		+ "OR (B.username = '" + username + "' "
+			      		+ " AND B.auctionid = A.auctionid AND B.auctionid = C.auctionid)) AND endtime < ?";
 			      
 			      //prep the sql statement
 			      stmt = conn.prepareStatement(sql);
@@ -64,28 +67,39 @@ public class AuctionHistory extends HttpServlet {
 			      ResultSet rs = stmt.executeQuery();
 			      
 			      List<AuctionObject> lao = new ArrayList<AuctionObject>();
-			      
+			      List<Integer> aids = new ArrayList<Integer>();
 			      
 			      while (rs.next())
 			      {
-			    	  Timestamp posttime = rs.getTimestamp("posttime");
-			    	  Timestamp endtime = rs.getTimestamp("endtime");
 			    	  int auctionid = rs.getInt("auctionid");
-			    	  float reserve = rs.getFloat("reserve");
-			    	  String seller = rs.getString("seller");
-			    	  
-			    	  AuctionObject ao = new AuctionObject(posttime,endtime, auctionid, reserve, seller);
-			    	  
-			    	  lao.add(ao);
+			    	  //check if we are getting a unique result
+			    	  //we only wanna count the first bid on another person's auction, rest don't matter
+			    	  if (!aids.contains(auctionid))
+			    	  {
+			    		  //add that auctionid to the auctionid array
+			    		  aids.add(auctionid);
+			    		  
+				    	  Timestamp posttime = rs.getTimestamp("posttime");
+				    	  Timestamp endtime = rs.getTimestamp("endtime");
+				    	  
+				    	  String seller = rs.getString("seller");
+				    	  String book = rs.getString("title");
+				    	  
+				    	  AuctionObject ao = new AuctionObject(posttime,endtime, auctionid, book, seller);
+				    	  
+				    	  lao.add(ao);
+			    	  }
 			    	  
 			      }
 			      
+			      int newsize = lao.size();
 			      
 			     
 				      
 			      request.setAttribute("success", true);
 			      request.setAttribute("ahtable", lao);
-			      RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/auctionhistory.jsp");
+			      request.setAttribute("newsize", newsize);
+			      RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/history.jsp");
 		    	  dispatcher.forward(request,response);
 			      
 			      
@@ -96,7 +110,7 @@ public class AuctionHistory extends HttpServlet {
 			catch(SQLException se){
 			      se.printStackTrace();
 			      request.setAttribute("success",false);
-			      request.getRequestDispatcher("/jsps/auctionhistory.jsp").forward(request, response);	
+			      request.getRequestDispatcher("/jsps/history.jsp").forward(request, response);	
 			   }catch(Exception e){
 			      e.printStackTrace();
 			   }
