@@ -142,12 +142,12 @@ public class CreateAuction extends HttpServlet {
 		      
 		      dateOpen.setTime(dateOpen.getTime()+86400000);
 		      
-		      System.out.println("Before:" + dateOpen);
+		      //System.out.println("Before:" + dateOpen);
 		      
 		      dateOpen.setHours(Integer.parseInt(openHour));
 		      dateOpen.setMinutes(Integer.parseInt(openMinutes));
 		      
-		      System.out.println("After:" + dateOpen);
+		      //System.out.println("After:" + dateOpen);
 		      
 		      Timestamp openTS= new Timestamp(dateOpen.getTime());
 		      
@@ -200,6 +200,55 @@ public class CreateAuction extends HttpServlet {
 		      //System.out.println(stmt.toString());
 		      stmt.executeUpdate();
 		      
+		      
+		      // CHECK ALERTS
+		      String q = "SELECT A.username FROM Alert A WHERE (A.title IS NULL OR A.title='" + title + "') AND (A.author IS NULL OR A.author='" + author + "') AND (A.isbn IS NULL OR A.isbn='" + isbn + "') AND (A.publisher IS NULL OR A.publisher='" + publisher + "') AND (A.format IS NULL OR A.format='" + format + "') AND (A.fictype IS NULL OR A.fictype=" + fictionType + ") AND (A.subcat IS NULL OR A.subcat='" + subType + "') AND (A.genre IS NULL OR A.genre='" + genre + "')";
+		      if(param1 != null) {
+		    	  q = q + " AND (A.attr IS NULL OR A.attr='" + param1 + "')";
+		      }			
+		      if(param2 != null) {
+		    	  q = q + " AND (A.attr2 IS NULL OR A.attr2='" + param2 + "')";
+		      }
+		      if(numPages != null) {
+		    	  q = q + " AND (A.minpg IS NULL OR A.minpg<=" + numPages + ") AND (A.maxpg IS NULL OR A.maxpg>=" + numPages + ")";
+		      }
+		      
+		      // get alerts
+		      PreparedStatement astmt = null;
+		      ResultSet aresult = null;
+		      astmt = conn.prepareStatement(q);
+		      aresult = astmt.executeQuery();
+		      
+		      String receiver = null;
+		      String sender = "alert@buyme.com";
+		      String contents = null;
+		      String sendtime = null;
+		      String expirytime = null;
+		      Date date;
+		      String msg = null;
+		      PreparedStatement mstmt = null;
+		      ResultSet mresult = null;
+		      
+		      // send alerts
+		      while(aresult.next()) {
+			    	receiver = aresult.getString("username");
+					date = new Date();
+					sendtime = "2018-" + date.getMonth() + "-" + date.getDay() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+					int m = date.getMonth();
+					if(m == 12) {
+						m = 1;
+					} else {
+						m++;
+					}
+					date.setMonth(m);
+					expirytime = "2018-" + date.getMonth() + "-" + date.getDay() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+			    	contents = "[ALERT] Auction ID #" + auctionId +", sold by " + username + ", matches your search criteria.";
+			    	
+			    	msg = "INSERT INTO Message (sender, receiver, sendtime, expirytime, contents) VALUES ('" + sender + "', '" + receiver + "', '" + sendtime + "', '" + expirytime + "', '" + contents + "')";
+			    	mstmt = conn.prepareStatement(msg);
+				    mstmt.executeUpdate();
+				    
+		      }
 		      
 
 		      stmt.close();
