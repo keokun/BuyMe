@@ -67,7 +67,7 @@ ${sb}
 			<a href="${pageContext.request.contextPath}/auctionview?auctionid=${r.auctionID}">Auction ID #${r.auctionID}</a>
 			<h3>${r.title}</h3>
 			<b>By ${r.author}</b><br>
-			Sold by <a href="${pageContext.request.contextPath}/AuctionHistory?username=${r.seller}">${r.seller}</a><br>
+			Sold by <a href="${pageContext.request.contextPath}/AuctionHistory?user=${r.seller}">${r.seller}</a><br>
 			Current bid: <fmt:formatNumber type="CURRENCY">${r.price}</fmt:formatNumber><br>
 		</td>
 	</tr>
