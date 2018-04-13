@@ -19,6 +19,115 @@ h2 {text-align:left;}
 <h1> Welcome to the BuyMe Forum!</h1>
 <br>
 <br>
+
+<% if (session.getAttribute("username") == null)
+	{ %>
+	<text> Please Login again. </text>
+	<br>
+	
+	<a href="${pageContext.request.contextPath}/home">Home</a>
+	
+		
+		
+<% } %>
+<% if (!(session.getAttribute("username") == null)) { %>
+
+<form action="${pageContext.request.contextPath}/Forum" id="searchform" method="post">
+<button type="submit" name="button" value="aquery">See All Queries</button>
+</form>
+
+<c:if test="${all}">
+
+	<text><% int numq = (int)request.getAttribute("newsize");
+										if (numq > 1)
+										{
+											out.print(numq + " queries in total<br>");
+										}
+										else if (numq == 0)
+										{
+											out.print("0 queries\n");
+										}
+										else
+										{
+											out.print("1 query in total\n");
+										}
+											%> </text>
+		<br>									
+	
+	<table>
+
+			<c:forEach var="ForumItem" items="${forumList}">
+			    <tr>
+			    	<c:out value= "${ForumItem.name}"/><br />
+			    </tr>
+			    	
+		    	<tr>
+		    		<c:out value= "${ForumItem.content}"/><br />
+		    	</tr>
+			    	
+			    	
+			    	<% if (!session.getAttribute("type").equals("regular"))
+					{ %>
+						<tr>	
+								<c:out value= "${ForumItem.tid}"/><br />
+								<%out.println("<br>"); %>
+						</tr>
+					<%} %>
+				<tr>
+				</tr>
+							
+			</c:forEach>
+			
+			
+		</table>
+	
+
+</c:if>
+
+<% if (!session.getAttribute("type").equals("regular")) { %>
+	<h2> Delete a query </h2>
+	<form action="${pageContext.request.contextPath}/Forum" method="post">
+	<input type="text" name="tid" placeholder="tid(threadid of query)" size=50>
+	<button type="submit" name="button" value="del">Submit</button>
+	</form>		
+	
+	<c:if test= "${not empty delete }">
+	
+		<c:if test="${delete}">
+			<text> Delete of Thread Successful </text>
+		</c:if>
+		
+		<c:if test=	"${not delete}">
+			<text> Delete of Thread Failure
+		</c:if>
+	
+	</c:if>
+	<br>
+	
+	
+	<h2> Answer a query </h2>
+	<form action="${pageContext.request.contextPath}/Forum" method="post">
+		TID of Query: <input type="text" name="tidquery">
+		<br>
+		<textarea rows="4" cols="50" name="ansquery" form="qform"> </textarea>
+		<br>
+		<button type="submit" name="button" value="asubmit">Submit</button>
+	</form>		
+	
+	<c:if test="${not empty ansdone }">
+		
+		<c:if test= "${ansdone}">
+			<text> Query answer success! </text>
+		</c:if>
+		
+		<c:if test="${not ansdone }">
+			<text> Unable to answer query: Query does not exist<text>
+		</c:if>
+		
+	</c:if>
+					 
+<% } %>	
+
 <h3> Search a query: </h3>
 <form action="${pageContext.request.contextPath}/Forum" id="searchform" method="post">
 <input type="text" name="keyword" placeholder="Keyword 1" size=50>
@@ -53,14 +162,37 @@ h2 {text-align:left;}
 											
 		<table>
 
-			<c:forEach var="rowData" items="${qtable}">
+			<c:forEach var="ForumItem" items="${forumList}">
 			    <tr>
-			        <c:forEach var="cellData" items="${rowData}" >
-			            <c:out value= "${cellData}"/><br />                 
-			        </c:forEach>
+			    	<c:out value= "${ForumItem.name}"/>
 			    </tr>
-			    <br>
+			    	
+		    	<tr>
+		    		<c:out value= "${ForumItem.content}" />
+		    	</tr>
+			    	
+			    <%--How do i get a newline here!!!! --%>
+			    	
+		    	<% if (!session.getAttribute("type").equals("regular"))
+				{ %>
+					<tr>	
+							<c:out value= "${ForumItem.tid}"/>
+							<%out.println("<br>"); %>
+					</tr>
+				<%} 
+		    	
+		    	else{%>
+					<tr> <td> <br> </td> </tr>
+					
+				<% }%>
+					
+			
+			    
+							
 			</c:forEach>
+			
+			
+			
 			
 		</table>
 		
@@ -88,13 +220,28 @@ h2 {text-align:left;}
 	</c:if>
 	
 	<c:if test="${not success}" >
-		<c:if test="${not body}">
-			<text> Query must have a body</text>
-		</c:if>
 		<text> Query Submission Failed.</text>
+		
 	</c:if>
 	
 </c:if>
+
+
+<br>
+<br>
+<br>
+
+	
+		
+		
+<% } %>		
+		
+		
+		
+<br>
+<br>
+<a href="${pageContext.request.contextPath}/home">Logout</a>		
+		
 
 
 
