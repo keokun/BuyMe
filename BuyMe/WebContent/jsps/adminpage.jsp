@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+	<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -34,11 +33,6 @@ h2 {text-align:left;}
 	<button type="submit" name="button" value="CR">Submit</button>
 </form>
 
-
-
-<br>
-* Indicates a required field.
-<br>
 <br>
 
 <c:if test="${not empty success}" >
@@ -51,6 +45,37 @@ h2 {text-align:left;}
 	</c:if>
 	
 </c:if>
+
+<br>
+<br>
+* Indicates a required field.
+<br>
+<br>
+
+<h2> Delete a regular account</h2>
+<br>
+<form action="${pageContext.request.contextPath}/manageaccount" method="post">
+	<input type="text" name="username" placeholder="Username" size=50> 
+	<br>
+	<button type="submit" name="button" value="delAcc">Submit</button>
+
+</form>
+<br>
+<br>
+
+<c:if test="${not empty delsuccess}">
+
+	<c:if test = "${delsuccess}">
+		<text><%out.print(request.getAttribute("username")); %> was successfully deleted </text>
+	</c:if>
+
+	<c:if test = "${not delsuccess}">
+		<text>Unable to delete account.</text>
+	</c:if>
+	
+</c:if>
+
+
 
 <%-- The sales report section --%>
 <br>
@@ -80,52 +105,32 @@ h2 {text-align:left;}
 
 <c:if test = "${not empty sres}">
 	<c:if test = "${sres}">
+		<text> SalesReport Retrieval Success! </text>
+		
+		<br>
 		
 		<%--If we are just taking the earnings --%>
 		<c:if test = "${justSum}">
-			
-			<table>
 		
 			<%--Just display the earnings --%>
-			<TH>Total Earnings</TH>
+			<text>Total Earnings</text>
+			
+			
 			<c:forEach items = "${salestable}" var = "sitem">
 				<tr>
-					<td>$<fmt:formatNumber type = "number" maxFractionDigits = "2" minFractionDigits = "2" value = "${sitem.res}"/></td>
+					<td>${sitem.res}</td>
 				</tr>
 			</c:forEach>
-			
-			</table>
 			
 			
 		</c:if>
 		
 		<%--If we are taking earnings of specific categories --%>
-		<c:if test = "${not justSum && not BSitems}">
+		<c:if test = "${not justSum}">
 		
 			<table>
 				<TH> Earnings </TH>
-				<TH> ${cat} </TH>
-				
-				
-				
-				<c:forEach items = "${salestable}" var = "sitem">
-					<tr>
-						<td>$<fmt:formatNumber type = "number" maxFractionDigits = "2" minFractionDigits = "2" value = "${sitem.res}"/></td>
-						<td>${sitem.stat}</td>
-					</tr>
-				</c:forEach>
-				
-				
-			</table>	
-			
-		</c:if>
-		
-		<c:if test = "${not justSum && BSitems}">
-		
-			<table>
-				<TH> Earnings </TH>
-				<TH> ${cat} </TH>
-				
+				<TH> <%request.getAttribute("cat"); %></TH>
 				
 				
 				<c:forEach items = "${salestable}" var = "sitem">
@@ -138,7 +143,7 @@ h2 {text-align:left;}
 				
 			</table>	
 			
-		</c:if>		
+		</c:if>
 
 	
 	
@@ -151,7 +156,7 @@ h2 {text-align:left;}
 </c:if>
 
 
-<br>
+
 
 <a href="${pageContext.request.contextPath}/home">Logout</a>
 
