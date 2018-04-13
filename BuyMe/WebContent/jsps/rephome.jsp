@@ -78,6 +78,31 @@ h1 {text-align:center;}
 <br>
 
 
+<h3> Remove an Auction</h3>
+<br>
+<form action="${pageContext.request.contextPath}/manageauction" method="post">
+	<input type = "text" name = "auctionid" placeholder = "Auction ID" size = 50>
+	<br>
+	<button type="submit" name="button" value="delAuc">Submit</button>
+
+</form>
+
+<br>
+<c:if test="${not empty delasuccess }">
+
+	<c:if test = "${delasuccess }">
+		<text>Successfully deleted Auction</text>
+	</c:if>
+	
+	<c:if test = "${not delasuccess }">
+		<text>Unable to delete Auction</text>
+	</c:if>
+
+
+</c:if>
+<br>
+
+
 
 
 
@@ -85,7 +110,7 @@ h1 {text-align:center;}
 <br>
 <br>
 
-<a href="${pageContext.request.contextPath}/AuctionHistory?user=${username}"> Auction History</a>
+<a href="${pageContext.request.contextPath}/AuctionHistory?username=${username}"> Auction History</a>
 <br>
 <br>
 <a href="${pageContext.request.contextPath}/Forum">Forum</a>

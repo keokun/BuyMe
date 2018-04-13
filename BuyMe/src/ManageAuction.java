@@ -109,6 +109,69 @@ public class ManageAuction extends HttpServlet {
 			
 		}// end delBid
 		
+		if (button.equals("delAuc"))
+		{
+			int auctionid = Integer.parseInt(request.getParameter("auctionid"));
+			
+			try
+			{
+				Class.forName("com.mysql.jdbc.Driver");
+				
+				conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
+				String sql;
+				
+				//get all the auctions and bids that are still going on now and match the username inputted.
+
+				
+				sql = "SELECT * FROM Auction A WHERE A.auctionid = " + auctionid;
+				stmt = conn.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery();
+				
+				//if there exists an auction with this auctionid, we delete it
+				if (rs.next())
+				{
+					sql = "DELETE FROM Auction WHERE auctionid = " + auctionid;
+					stmt = conn.prepareStatement(sql);
+					stmt.executeUpdate();
+					
+					request.setAttribute("delasuccess", true);
+					request.getRequestDispatcher("/jsps/rephome.jsp").forward(request, response);
+				}
+				
+				//if there does not exist such a bid we can't delete
+				else
+				{
+				      request.setAttribute("delasuccess",false);
+				      request.getRequestDispatcher("/jsps/rephome.jsp").forward(request, response);
+				}
+				
+			}
+			
+			catch(SQLException se){
+			      se.printStackTrace();
+			      request.setAttribute("delasuccess",false);
+			      request.getRequestDispatcher("/jsps/rephome.jsp").forward(request, response);	
+			   }catch(Exception e){
+			      e.printStackTrace();
+			   }
+			
+			finally{
+			      try{
+			         if(stmt!=null)
+			            stmt.close();
+			      }catch(SQLException se2){
+			      }
+			      try{
+			         if(conn!=null)
+			            conn.close();
+			      }catch(SQLException se){
+			         se.printStackTrace();
+			      }
+			   }
+			
+			
+		}// end delBid
+		
 		
 		
 	}//end doPost
