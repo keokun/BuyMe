@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -79,32 +80,52 @@ h2 {text-align:left;}
 
 <c:if test = "${not empty sres}">
 	<c:if test = "${sres}">
-		<text> SalesReport Retrieval Success! </text>
-		
-		<br>
 		
 		<%--If we are just taking the earnings --%>
 		<c:if test = "${justSum}">
+			
+			<table>
 		
 			<%--Just display the earnings --%>
-			<text>Total Earnings</text>
-			
-			
+			<TH>Total Earnings</TH>
 			<c:forEach items = "${salestable}" var = "sitem">
 				<tr>
-					<td>${sitem.res}</td>
+					<td>$<fmt:formatNumber type = "number" maxFractionDigits = "2" minFractionDigits = "2" value = "${sitem.res}"/></td>
 				</tr>
 			</c:forEach>
+			
+			</table>
 			
 			
 		</c:if>
 		
 		<%--If we are taking earnings of specific categories --%>
-		<c:if test = "${not justSum}">
+		<c:if test = "${not justSum && not BSitems}">
 		
 			<table>
 				<TH> Earnings </TH>
-				<TH> <%request.getAttribute("cat"); %></TH>
+				<TH> ${cat} </TH>
+				
+				
+				
+				<c:forEach items = "${salestable}" var = "sitem">
+					<tr>
+						<td>$<fmt:formatNumber type = "number" maxFractionDigits = "2" minFractionDigits = "2" value = "${sitem.res}"/></td>
+						<td>${sitem.stat}</td>
+					</tr>
+				</c:forEach>
+				
+				
+			</table>	
+			
+		</c:if>
+		
+		<c:if test = "${not justSum && BSitems}">
+		
+			<table>
+				<TH> Earnings </TH>
+				<TH> ${cat} </TH>
+				
 				
 				
 				<c:forEach items = "${salestable}" var = "sitem">
@@ -117,7 +138,7 @@ h2 {text-align:left;}
 				
 			</table>	
 			
-		</c:if>
+		</c:if>		
 
 	
 	
@@ -130,7 +151,7 @@ h2 {text-align:left;}
 </c:if>
 
 
-
+<br>
 
 <a href="${pageContext.request.contextPath}/home">Logout</a>
 

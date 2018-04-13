@@ -54,8 +54,11 @@ public class SalesReport extends HttpServlet {
 			  
 			      
 			      /* Obtain every auction whose endpoint is before the current timestamp*/
-			      java.util.Date date = new java.util.Date();
-			      Timestamp currTime = new Timestamp(date.getTime());
+			     // java.util.Date date = new java.util.Date();
+			      Timestamp currTime = new Timestamp(System.currentTimeMillis()+ 3600000);
+			      
+			     // currTime.setTime(currTime);
+			      
 			      
 			      
 			     
@@ -122,7 +125,7 @@ public class SalesReport extends HttpServlet {
 									"WHERE B.auctionid = A.auctionid AND B.auctionid=J.auctionid AND B.amount > A.reserve AND A.endtime < '" + currTime + "' AND B.amount IN (SELECT MAX(b2.amount) FROM Bid b2 WHERE b2.auctionid=A.auctionid) " + 
 									"GROUP BY J.isbn Order BY Res DESC";
 							stat = "isbn";
-							
+							request.setAttribute("BSitems", true);
 							
 							break;
 							
@@ -176,7 +179,7 @@ public class SalesReport extends HttpServlet {
 			      //If we are getting earnings of a particular category
 			      if (!(reportType.equals("TotEarn")))
 		    	  {
-		    	  	request.setAttribute("cat", stat);
+		    	  	request.setAttribute("cat", stat.substring(0,1).toUpperCase()+stat.substring(1));
 		    	  	request.setAttribute("justSum", false);
 		    	  }
 			      
