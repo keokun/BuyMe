@@ -36,7 +36,11 @@ private static final long serialVersionUID = 1L;
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/jsps/login.jsp").forward(request, response);
+		if(request.getSession().getAttribute("username")!=null) {
+			response.sendRedirect(request.getContextPath()+"/home");
+		}
+		else
+			request.getRequestDispatcher("/jsps/login.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -66,8 +70,9 @@ private static final long serialVersionUID = 1L;
 			    	  request.setAttribute("success",true);
 			    	  request.setAttribute("firstname", fn);
 			    	  request.getSession().setAttribute("username", username);
+			    	  request.getSession().setAttribute("type", type);
 			    	  //customer account
-			    	  if (type.equals("regular"))
+			    	  /*if (type.equals("regular"))
 			    	  {
 				    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/welcome.jsp");
 				    	  dispatcher.forward(request,response);
@@ -85,7 +90,9 @@ private static final long serialVersionUID = 1L;
 			    	  {
 				    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/adminpage.jsp");
 				    	  dispatcher.forward(request,response);
-			    	  }
+			    	  }*/
+			    	  
+			    	  response.sendRedirect(request.getContextPath()+"/home");
 			      } 
 			      
 			      else {
