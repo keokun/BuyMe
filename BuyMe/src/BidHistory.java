@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,8 +39,7 @@ public class BidHistory extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-			String button = request.getParameter("button");
-		
+			
 	
 			int auction = Integer.parseInt(request.getParameter("auction"));
 			
@@ -91,6 +91,8 @@ public class BidHistory extends HttpServlet {
 				request.setAttribute("bidsuccess", true);
 				request.setAttribute("newsize", newsize);
 				request.setAttribute("bidtable",bol);
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/history.jsp");
+				dispatcher.forward(request, response);	
 				
 			}
 			

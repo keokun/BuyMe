@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>User Auction History</title>
+<title>User History</title>
 </head>
 <body>
 
@@ -19,7 +19,9 @@
 		<text>Auction History Retrieval Success!</text>
 		<br>
 		
-		<text>Auction History: <% int numq = (int)request.getAttribute("newsize");
+		<text>Auction History: <% out.println(request.getAttribute("username"));
+		
+									int numq = (int)request.getAttribute("newsize");
 										if (numq > 1)
 										{
 											out.print(numq + " auctions\n");
@@ -88,7 +90,7 @@
 	<c:if test= "${bidsuccess }">
 	<text>Bid History Retrieval Success!</text>
 		<br>
-		
+		<br>
 		<text>Bid History <% int numq = (int)request.getAttribute("newsize");
 										if (numq > 1)
 										{

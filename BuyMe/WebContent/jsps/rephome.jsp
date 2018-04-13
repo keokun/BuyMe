@@ -51,6 +51,39 @@ h1 {text-align:center;}
 
 <br>
 <br>
+<h3> Delete a bid</h3>
+<br>
+<form action="${pageContext.request.contextPath}/manageauction" method="post">
+	<input type="text" name="username" placeholder="Username" size=50> 
+	<br>
+	<input type = "text" name = "auctionid" placeholder = "Auction ID" size = 50>
+	<br>
+	<button type="submit" name="button" value="delBid">Submit</button>
+
+</form>
+
+<c:if test="${not empty delbsuccess }">
+
+	<c:if test = "${delbsuccess }">
+		<text>Successfully deleted bid</text>
+	</c:if>
+	
+	<c:if test = "${not delbsuccess }">
+		<text>Unable to delete bid</text>
+	</c:if>
+
+
+</c:if>
+<br>
+<br>
+
+
+
+
+
+
+<br>
+<br>
 
 <a href="${pageContext.request.contextPath}/AuctionHistory?user=${username}"> Auction History</a>
 <br>
