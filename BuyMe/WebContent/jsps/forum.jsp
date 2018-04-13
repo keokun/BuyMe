@@ -45,7 +45,7 @@ li a {
 </ul>
 </div>
 
-<h1> Welcome to the BuyMe Forum!</h1>
+<h1>BuyMe Forum</h1>
 <br>
 <br>
 
