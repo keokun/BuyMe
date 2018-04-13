@@ -261,6 +261,10 @@ li a:hover {
 		</c:if>
 	
 	</p>
+	
+	<p>
+		<a href="${pageContext.request.contextPath}/BidHistory?auctionid=${auctionId}">Bid History</a>
+	</p>
 
 </div>
 
