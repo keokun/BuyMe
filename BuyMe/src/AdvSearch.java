@@ -283,7 +283,7 @@ public class AdvSearch extends HttpServlet {
 				
 				// create time - format 2018-4-30 23:59:59
 				Date date = new Date();
-				String createtime = date.getYear() + "-" + date.getMonth() + "-" + date.getDay() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+				String createtime = "2018-" + date.getMonth() + "-" + date.getDay() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 				
 				q = "INSERT INTO Alert (username, createtime";
 				q2 = " VALUES ('" + request.getSession().getAttribute("username") + "', " + "'" + createtime + "'";
