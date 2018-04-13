@@ -13,10 +13,10 @@ public class Home extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String type=(String) request.getSession().getAttribute("type");
+		String username=(String)request.getSession().getAttribute("username");
 		
 		if(type.equals("regular")) {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/welcome.jsp");
-	    	dispatcher.forward(request,response);
+			response.sendRedirect(request.getContextPath()+"/AuctionHistory?user=" + username);
 		}
 		
 		else if (type.equals("rep")) {

@@ -7,20 +7,52 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>User History</title>
+<title>History</title>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+</style>
 </head>
 <body>
 
+<div id="navBar">
+<ul>
+	<li><a href="${pageContext.request.contextPath}/logout">Logout</a> </li>
+	<li><a href="${pageContext.request.contextPath}/createauction">Create Auction</a></li>
+	<li><a href="${pageContext.request.contextPath}/browse">Browse</a></li>
+	<li><a href="${pageContext.request.contextPath}/Forum">Forum</a></li>
+	<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+</ul>
+</div>
+
+<br>
 
 <c:if test="${not empty success}">
 
 
 	<%-- If we are able to get history, printout  --%>
 	<c:if test = "${success}">
-		<text>Auction History Retrieval Success!</text>
+		<text>Auction History For ${param.user}</text>
 		<br>
 		
-		<text>Auction History: <% out.println(request.getAttribute("username"));
+		<text><%
 		
 									int numq = (int)request.getAttribute("newsize");
 										if (numq > 1)
@@ -42,22 +74,22 @@
 		
 			<c:forEach var = "auction" items = "${ahtable}">
 				<tr>
-					<text>From: </text><c:out value= "${auction.posttime}" />
+					<text>Open Date: </text><c:out value= "${auction.posttime}" />
 					<%out.println("<br>"); %>
 				</tr>
 				
 				<tr>
-					To: <c:out value= "${auction.endtime}"/>
+					Close Date: <c:out value= "${auction.endtime}"/>
 					<%out.println("<br>"); %>
 				</tr>
 				
 				<tr>
-					<c:out value= "${auction.book}"/>
+					Book: <c:out value= "${auction.book}"/>
 					<%out.println("<br>"); %>
 				</tr>
 				<tr>
 				
-					<c:out value= "${auction.seller}"/>
+					Seller: <c:out value= "${auction.seller}"/>
 					
 					<%out.println("<br><br>"); %>
 					
