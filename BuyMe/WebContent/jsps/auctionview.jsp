@@ -177,7 +177,7 @@ li a:hover {
 
 <div id="seller">
 	
-	Sold By: ${seller}
+	Sold By: <a href="${pageContext.request.contextPath}/AuctionHistory?user=${seller}">${seller}</a>
 
 </div>
 
@@ -273,7 +273,7 @@ li a:hover {
 						Max Bid: 
 					</td>
 					<td>
-						By ${maxBidUsername} for
+						By <a href="${pageContext.request.contextPath}/AuctionHistory?user=${maxBidUsername}">${maxBidUsername}</a> for
 					</td>
 					
 					<td>
