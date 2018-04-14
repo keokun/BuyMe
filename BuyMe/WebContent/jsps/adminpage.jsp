@@ -8,15 +8,51 @@
 <style>
 h1 {text-align:center;}
 h2 {text-align:left;}
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
 </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Admin Page</title>
 
 </head>
+
+<div id="navBar">
+<ul>
+	<li><a href="${pageContext.request.contextPath}/logout">Logout</a> </li>
+	<li><a href="${pageContext.request.contextPath}/createauction">Create Auction</a></li>
+	<li><a href="${pageContext.request.contextPath}/browse">Browse</a></li>
+	<li><a href="${pageContext.request.contextPath}/Forum">Forum</a></li>
+	<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+</ul>
+</div>
+
 <h1> Welcome admin</h1>
 
 <body>
+
 <h2>Create a Customer Rep</h2>
 <form action="${pageContext.request.contextPath}/createaccount" method="post">
 	<input type="text" name="fname" placeholder="First Name" size=50>
@@ -154,11 +190,6 @@ h2 {text-align:left;}
 	</c:if>
 
 </c:if>
-
-
-
-
-<a href="${pageContext.request.contextPath}/home">Logout</a>
 
 
 </body>
