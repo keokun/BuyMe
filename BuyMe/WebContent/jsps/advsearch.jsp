@@ -99,6 +99,7 @@ function selectCheckNonFictionSub(nameSelect) {
 	<li><a href="${pageContext.request.contextPath}/createauction">Create Auction</a></li>
 	<li><a href="${pageContext.request.contextPath}/browse">Browse</a></li>
 	<li><a href="${pageContext.request.contextPath}/Forum">Forum</a></li>
+	<li><a href="${pageContext.request.contextPath}/inbox">Inbox</a></li>
 	<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
 </ul>
 </div>
