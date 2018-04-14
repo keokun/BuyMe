@@ -42,20 +42,29 @@ li a {
 </div>
 <h1>Inbox for ${username}</h1>
 
+<p>
 Number of Messages: ${numMessages}
+</p>
 
-<table>
+<br>
+
+
 <c:forEach var = "message" items = "${messageList}">
-	<tr>
-		<td>Sender: ${message.sender}</td>
-		<td>Receiver: ${message.reciever}</td>
-		<td>Send Time: ${message.sendtime}</td>
-		<td>Contents: ${message.contents}
-	</tr>
+Sender: ${message.sender}
+<br>
+Receiver: ${message.receiver}
+<br>
+Send Time: ${message.sendtime}
+<br>
+<p>
+Contents: ${message.contents}
+</p>
+
+<br>
+<br>
 				
 		
 </c:forEach>
-</table>
 
 </body>
 </html>

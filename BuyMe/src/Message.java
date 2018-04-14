@@ -12,5 +12,20 @@ public class Message {
 		this.sendtime=sendtime;
 		this.contents=contents;
 	}
-
+	
+	public String getSender() {
+		return sender;
+	}
+	
+	public String getReceiver() {
+		return receiver;
+	}
+	
+	public String getSendtime() {
+		return sendtime;
+	}
+	
+	public String getContents() {
+		return contents;
+	}
 }
