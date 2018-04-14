@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -7,6 +7,27 @@
 
 <style>
 h1 {text-align:center;}
+h2 {text-align:left;}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
 </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -15,8 +36,17 @@ h1 {text-align:center;}
 
 
 <body>
+
+<div id="navBar">
+<ul>
+	<li><a href="${pageContext.request.contextPath}/logout">Logout</a> </li>
+	<li><a href="${pageContext.request.contextPath}/createauction">Create Auction</a></li>
+	<li><a href="${pageContext.request.contextPath}/browse">Browse</a></li>
+	<li><a href="${pageContext.request.contextPath}/Forum">Forum</a></li>
+	<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+</ul>
+</div>
 <h1> Welcome Representative!</h1>
-<%out.println(request.getAttribute("firstname"));%> <%out.println(request.getAttribute("lastname"));%>'s Home
 
 
 
@@ -103,22 +133,6 @@ h1 {text-align:center;}
 <br>
 
 
-
-
-
-
-<br>
-<br>
-
-<a href="${pageContext.request.contextPath}/AuctionHistory?username=${username}"> Auction History</a>
-<br>
-<br>
-<a href="${pageContext.request.contextPath}/Forum">Forum</a>
-
-<br>
-<br>
-
-<a href="${pageContext.request.contextPath}/home">Logout</a>
 
 </body>
 </html>
