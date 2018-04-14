@@ -13,7 +13,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/*
+ * Josh created this page
+ */
 @WebServlet("/manageauction")
 public class ManageAuction extends HttpServlet {
 

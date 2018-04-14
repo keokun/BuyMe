@@ -1,3 +1,6 @@
+/*
+ * Kristen created this page
+ */
 public class SearchResult{
 	
 	String title;

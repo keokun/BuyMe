@@ -1,5 +1,7 @@
 import java.sql.Timestamp;
-
+/*
+ * Josh created this page
+ */
 public class BidObject {
 	Timestamp time;
 	float amount;

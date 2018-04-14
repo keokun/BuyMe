@@ -1,4 +1,6 @@
-
+/*
+ * Josh created this page
+ */
 public class ForumItem{
 	public int getTid() {
 		return tid;

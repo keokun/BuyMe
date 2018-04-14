@@ -1,3 +1,6 @@
+/*
+ * Josh created this page
+ */
 public class ReportItem{
 	public float getRes() {
 		return res;

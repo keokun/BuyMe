@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+/*
+ * Josh created this page
+ */
 
 @WebServlet("/Forum")
 public class Forum extends HttpServlet {

@@ -1,4 +1,6 @@
-
+/*
+ * Kyle created this page
+ */
 public class Message {
 	
 	public String sender;

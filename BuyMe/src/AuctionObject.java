@@ -1,5 +1,5 @@
 import java.sql.Timestamp;
-
+//Josh Created this page
 public class AuctionObject {
 	
 	
