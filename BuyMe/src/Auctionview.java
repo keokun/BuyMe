@@ -5,14 +5,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 	import javax.servlet.http.HttpServletResponse;
-/* Kyle Created this page */
+
+/* Kyle Created this page
+ * 
+ * Kristen added "view similar items" functionality */
+
 @WebServlet("/auctionview")
 public class Auctionview extends HttpServlet {
 
@@ -145,7 +151,6 @@ public class Auctionview extends HttpServlet {
 		      
 		     
 		      stmt.close();
-		      conn.close();
 		      
 		      if (closeDate.getTime()<System.currentTimeMillis()) {
 		    	  if(maxBid>=reservePrice&&maxBid>0.0) {
@@ -156,6 +161,53 @@ public class Auctionview extends HttpServlet {
 		    		  request.setAttribute("sold", false);
 		    	  }
 		      }
+		      
+		      
+		      // view similar items: top 5 with same subcategory
+		      
+		      List<SearchResult> sr = new ArrayList<SearchResult>();
+			  SearchResult r;
+			    
+		      PreparedStatement simst = null;
+		      ResultSet simr = null;
+		      String simq = "SELECT * FROM Auction A, Book B WHERE A.auctionid=B.auctionid AND B.subcat='" + subcategory + "' AND NOT A.auctionid=" + auctionId;
+		      simst=conn.prepareStatement(simq);
+		      simr = simst.executeQuery();
+		      
+		      String simtitle = null;
+			  String simauthor = null;
+			  String simseller = null;
+			  float simprice = 0;
+			  int simID = -1;
+			  int count = 5;
+			    
+			  while(simr.next() && count > 0) {
+					
+				  simtitle = simr.getString("title");
+				  simauthor = simr.getString("author");
+				  simseller = simr.getString("seller");
+				  simID = simr.getInt("auctionid");
+					
+				  String str2 = "SELECT MAX(B.amount) FROM Bid B WHERE B.auctionid=" + simID;
+				  PreparedStatement stmt2 = conn.prepareStatement(str2);
+				  ResultSet r2 = stmt2.executeQuery();
+					if(r2 == null) {
+						simprice = 0;
+					} else {
+						r2.next();
+						simprice = r2.getFloat("MAX(B.amount)");
+					}
+					
+					stmt2.close();
+					r = new SearchResult(simtitle, simauthor, simseller, simprice, simID);
+					sr.add(r);
+					count--;
+			  }
+		      
+			  simst.close();
+		      // end similar results
+		      
+		      conn.close();
 		      
 		      //Set attributes for jsp
 		      
@@ -183,7 +235,7 @@ public class Auctionview extends HttpServlet {
 		      request.setAttribute("maxBidAutoBid", maxBidAutoBid);
 		      request.setAttribute("minBid", maxBid+0.01);
 		      
-		      
+		      request.setAttribute("sr", sr); 
 		      
 		      request.getRequestDispatcher("/jsps/auctionview.jsp").forward(request, response);
 		      
