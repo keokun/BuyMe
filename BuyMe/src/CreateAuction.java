@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 /*
  * Kyle created this page
+ *
+ * Kristen added alerts functionality
  */
 @WebServlet("/createauction")
 public class CreateAuction extends HttpServlet {
@@ -142,7 +144,7 @@ public class CreateAuction extends HttpServlet {
 		      
 		      Date dateOpen=sdf.parse(openDate);
 		      
-		      dateOpen.setTime(dateOpen.getTime()+86400000);
+		      dateOpen.setTime(dateOpen.getTime());
 		      
 		      //System.out.println("Before:" + dateOpen);
 		      
@@ -155,7 +157,7 @@ public class CreateAuction extends HttpServlet {
 		      
 		      Date dateClose=sdf.parse(closeDate);
 		      
-		      dateClose.setTime(dateOpen.getTime()+86400000);
+		      dateClose.setTime(dateClose.getTime());
 		      
 		      dateClose.setHours(Integer.parseInt(closeHour));
 		      dateClose.setMinutes(Integer.parseInt(closeMinutes));
@@ -234,16 +236,20 @@ public class CreateAuction extends HttpServlet {
 		      // send alerts
 		      while(aresult.next()) {
 			    	receiver = aresult.getString("username");
-					date = new Date();
-					sendtime = "2018-" + date.getMonth() + "-" + date.getDay() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-					int m = date.getMonth();
-					if(m == 12) {
-						m = 1;
+					// create time - format 2018-4-30 23:59:59
+					Date adate = new Date();
+					int year = adate.getYear() - 100 + 2000;
+					int month = adate.getMonth() + 1;
+					int day = adate.getDate();
+					sendtime = year + "-" + month + "-" + day + " " + adate.getHours() + ":" + adate.getMinutes() + ":" + adate.getSeconds();
+					adate = new Date();
+					if(month == 12) {
+						month = 1;
 					} else {
-						m++;
+						month++;
 					}
-					date.setMonth(m);
-					expirytime = "2018-" + date.getMonth() + "-" + date.getDay() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+					adate.setMonth(month);
+					expirytime = year + "-" + month + "-" + day + " " + adate.getHours() + ":" + adate.getMinutes() + ":" + adate.getSeconds();
 			    	contents = "[ALERT] Auction ID #" + auctionId +", sold by " + username + ", matches your search criteria.";
 			    	
 			    	msg = "INSERT INTO Message (sender, receiver, sendtime, expirytime, contents) VALUES ('" + sender + "', '" + receiver + "', '" + sendtime + "', '" + expirytime + "', '" + contents + "')";

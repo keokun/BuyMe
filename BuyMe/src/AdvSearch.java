@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Date;
 
@@ -283,7 +284,10 @@ public class AdvSearch extends HttpServlet {
 				
 				// create time - format 2018-4-30 23:59:59
 				Date date = new Date();
-				String createtime = "2018-" + date.getMonth() + "-" + date.getDay() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+				int year = date.getYear() - 100 + 2000;
+				int month = date.getMonth() + 1;
+				int day = date.getDate();
+				String createtime = year + "-" + month + "-" + day + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 				
 				q = "INSERT INTO Alert (username, createtime";
 				q2 = " VALUES ('" + request.getSession().getAttribute("username") + "', " + "'" + createtime + "'";
