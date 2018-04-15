@@ -20,8 +20,6 @@ function selectCheckAutobidding(nameSelect) {
 		}
 	}
 }
-
-
 function validateForm() {
 	var bidAmount=parseFloat(document.forms["bidForm"]["bidAmount"].value);
 	
@@ -45,83 +43,64 @@ function validateForm() {
 	
 	
 }
-
-
 </script>
 
 <style>
-
 h1 {
 	text-align: center;
 }
-
 #author {
 	text-align: center;
 }
-
 #seller {
 	margin-top: 5px;
 	text-align: center;
 }
-
 #dates {
 	margin-top: 10px;
 	text-align: center;
 }
-
 #details {
 	margin-top: 10px;
 	text-align: center;
 }
-
 #itemSold {
 	margin-top: 10px;
 	text-align: center;
 }
-
 #itemNotSold {
 	margin-top: 10px;
 	text-align: center;
 }
-
 #maxBidDetails {
 	margin-top: 10px;
 	text-align: center;
 }
-
 #bid {
 	margin-top: 10px;
 	text-align: center;
 }
-
 #bidAmountDiv {
 	display: inline-block;
 }
-
 #autoBiddingDiv {
 	display: inline-block;
 }
-
 #autoBidDiv {
 	display: inline-block;
 }
-
-
 #auctionNotBegun {
 	margin-top: 10px;
 	text-align: center;
 }
-
 #submitButton {
 	margin-top: 10px;
 	text-align: center;
 }
-
 #amSellerDiv {
 	margin-top: 10px;
 	text-align: center;
 }
-
 table.center {
     margin-left:auto; 
     margin-right:auto;
@@ -137,11 +116,9 @@ table.center {
     overflow: hidden;
     background-color: #333;
 }
-
 li {
     float: right;
 }
-
 li a {
     display: block;
     color: white;
@@ -149,11 +126,12 @@ li a {
     padding: 14px 16px;
     text-decoration: none;
 }
-
 li a:hover {
     background-color: #111;
 }
-
+h2 { text-align: center; }
+h3 {font-weight:bold; font-style:italic; padding:0px; margin:0px;}
+a { text-decoration: none; }
 </style>
 
 <title>Auction ${auctionId}</title>
@@ -203,7 +181,7 @@ li a:hover {
 		
 		<br>
 		
-		Isbn: ${isbn}
+		ISBN: ${isbn}
 		
 		<br>
 		
@@ -376,12 +354,25 @@ li a:hover {
 	<c:if test="${(active == 'after') && (not sold)}">
 		The item was not sold because no bid met the reserve price of $${reservePrice}
 	</c:if>
-</div>
-
-
-
-
-
-
+</div><br>
+<br>
+<br>
+<h2>View Similar Items</h2>
+<table align=center><tr>
+<c:forEach items="${sr}" var="r">
+		<td width=200px>
+			<a href="${pageContext.request.contextPath}/auctionview?auctionid=${r.auctionID}">Auction ID #${r.auctionID}</a>
+			<h3>${r.title}</h3>
+			<b>By ${r.author}</b><br>
+			Sold by <a href="${pageContext.request.contextPath}/AuctionHistory?user=${r.seller}">${r.seller}</a><br>
+			Current bid: <fmt:formatNumber type="CURRENCY">${r.price}</fmt:formatNumber><br>
+		</td>
+</c:forEach>
+</tr></table><br>
+<br>
+<br>
+<br>
+<br>
+<br>
 </body>
 </html>
