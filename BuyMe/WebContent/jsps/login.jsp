@@ -8,6 +8,7 @@
 <style>
 h1 {text-align:center;}
 h2 {text-align:center;}
+a { text-decoration: none; }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <style>
@@ -17,7 +18,6 @@ h2 {text-align:center;}
     padding: 0px 10px;
     text-align: center;
 }
-
 </style>
 <title>Buy Me</title>
 </head>
@@ -25,7 +25,7 @@ h2 {text-align:center;}
 <h1>Login</h1>
 <br>
 <br>
-<h2>Please enter your account information below:</h2>
+<h2>Please enter your account information below.</h2>
 <br>
 <br>
 
@@ -35,9 +35,9 @@ h2 {text-align:center;}
 
 <form action="${pageContext.request.contextPath}/" method="post">
 	<input type="text" name="username" placeholder="Username" size=50> 
-	<br>
+	<br><br>
 	<input type="password" name="password" placeholder="Password" size=50> 
-	<br>
+	<br><br>
 	<button type="submit" name="button" value="button1">Submit</button>
 </form>
 

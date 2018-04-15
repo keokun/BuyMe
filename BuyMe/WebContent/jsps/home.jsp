@@ -7,7 +7,8 @@
 <style>
 h1 {text-align:center;}
 h2 {text-align:center;}
-
+.home { text-align:center; font-size:20px;}
+a { text-decoration: none; }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Welcome to BuyMe!</title>
@@ -16,18 +17,18 @@ h2 {text-align:center;}
 
 
 <h1> Welcome to BuyMe! </h1>
-
+<div class="home">
 <br>
-Not registered? Get started.
+<i>Not registered? Get started.</i>
 <br>
-<a href="${pageContext.request.contextPath}/createaccount">Create an Account</a>
+<b><a href="${pageContext.request.contextPath}/createaccount">Create an Account</a></b>
 <br>
 <br>
-Already have an account?
+<i>Already have an account?</i>
 <br>
-<a href="${pageContext.request.contextPath}/login">Log in.</a>
+<b><a href="${pageContext.request.contextPath}/login">Login</a></b>
 <br>
-
+</div>
 
 </body>
 </html>
