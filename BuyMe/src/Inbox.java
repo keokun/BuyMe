@@ -32,7 +32,7 @@ public class Inbox extends HttpServlet {
 		      conn = DriverManager.getConnection(BuyMe.DB_URL,BuyMe.USER,BuyMe.PASS);
 
 		      String sql;
-		      sql = "SELECT * FROM Message WHERE receiver='" + username + "' OR sender='" + username + "'";
+		      sql = "SELECT * FROM Message WHERE receiver='" + username + "' OR sender='" + username + "' AND forum <> 1";
 		      stmt=conn.prepareStatement(sql);
 		      ResultSet rs=stmt.executeQuery();
 		      
