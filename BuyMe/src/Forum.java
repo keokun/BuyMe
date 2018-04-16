@@ -136,7 +136,7 @@ public class Forum extends HttpServlet {
 				 
 				 String sql;
 				 
-				 sql = "SELECT * FROM Message ORDER BY tid ASC";
+				 sql = "SELECT * FROM Message WHERE forum=1 ORDER BY tid ASC";
 				 
 				 stmt = conn.prepareStatement(sql);
 				 ResultSet rs = stmt.executeQuery();
