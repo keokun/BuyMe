@@ -11,7 +11,6 @@
 <style>
 h1 {text-align:center;}
 h2 {text-align:left;}
-
 ul {
     list-style-type: none;
     margin: 0;
@@ -19,11 +18,9 @@ ul {
     overflow: hidden;
     background-color: #333;
 }
-
 li {
     float: right;
 }
-
 li a {
     display: block;
     color: white;
@@ -69,8 +66,8 @@ li a {
 </form>
 
 <c:if test="${all}">
-
-	<text><% int numq = (int)request.getAttribute("newsize");
+	<br>
+	<i><text><% int numq = (int)request.getAttribute("newsize");
 										if (numq > 1)
 										{
 											out.print(numq + " queries in total<br>");
@@ -83,14 +80,14 @@ li a {
 										{
 											out.print("1 query in total\n");
 										}
-											%> </text>
+											%> </text></i>
 		<br>									
 	
 	<table>
 
 			<c:forEach var="ForumItem" items="${forumList}">
 			    <tr>
-			    	<c:out value= "${ForumItem.name}"/><br />
+			    	<b><c:out value= "${ForumItem.name}"/></b><br />
 			    </tr>
 			    	
 		    	<tr>
@@ -105,7 +102,7 @@ li a {
 								<%out.println("<br>"); %>
 						</tr>
 					<%} %>
-				<tr>
+				<tr><br>
 				</tr>
 							
 			</c:forEach>
@@ -196,7 +193,7 @@ li a {
 
 			<c:forEach var="ForumItem" items="${forumList}">
 			    <tr>
-			    	<c:out value= "${ForumItem.name}"/>
+			    	<b><c:out value= "${ForumItem.name}"/></b>
 			    </tr>
 			    	
 		    	<tr>
@@ -217,7 +214,7 @@ li a {
 					<tr> <td> <br> </td> </tr>
 					
 				<% }%>
-					
+				
 			
 			    
 							
@@ -241,9 +238,9 @@ li a {
 <h2> Enter a new query here: </h2>
 <form action="${pageContext.request.contextPath}/Forum" id="usrform" method="post">
   Heading: <input type="text" name="heading">
-  <button type="submit" name="button" value="qsubmit">Submit</button>
+  <button type="submit" name="button" value="qsubmit">Submit</button><br>
 	<br>
-	<textarea rows="4" cols="50" name="query" form="qform"> </textarea>
+	<textarea rows="4" cols="50" name="query"> </textarea>
 </form>
 
 <c:if test="${not empty success}" >
