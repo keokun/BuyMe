@@ -60,9 +60,9 @@ public class CreateAccount extends HttpServlet {
 			      
 			      /* On Success*/
 		    	  request.setAttribute("success",true);
-		    	  request.setAttribute("firstname", fname);
-		    	  request.getSession().setAttribute("username", username);
-		    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/welcome.jsp");
+		    	  //request.setAttribute("firstname", fname);
+		    	  request.getSession().setAttribute("user", username);
+		    	  RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(request.getContextPath()+"/home");
 		    	  dispatcher.forward(request,response);
 			      
 		    	  /* On Failure*/
