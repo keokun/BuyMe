@@ -218,13 +218,12 @@ public class Forum extends HttpServlet {
 				 
 				 //retrieves the initial question
 				 sql = "SELECT * FROM Message WHERE (contents LIKE '%" + keyword + "%'" +  "AND " 
-						+"contents LIKE '%" + keyword2 + " %')";
+						+"contents LIKE '%" + keyword2 + " %') AND forum = 1";
 				 
 				
 				 stmt = conn.prepareStatement(sql);
 				 ResultSet rs = stmt.executeQuery();
 				 
-				 //Get the answers to these questions
 
 				 List<ForumItem> fl = new ArrayList <ForumItem>();
 				 
@@ -259,7 +258,7 @@ public class Forum extends HttpServlet {
 						 /* Where we find the answer to this query, if there is one*/
 						 String sql2;
 						 
-						 sql2 = "SELECT * FROM Message WHERE tid = " +  tid + " AND sendtime <> ?";
+						 sql2 = "SELECT * FROM Message WHERE tid = " +  tid + "  AND forum = 1 AND sendtime <> ?";
 						 
 						 stmt = conn.prepareStatement(sql2);
 						 stmt.setTimestamp(1, ts);
@@ -338,7 +337,7 @@ public class Forum extends HttpServlet {
 				 
 				 String sql;
 				 
-				 sql = "DELETE FROM Message WHERE tid = " + tid ;
+				 sql = "DELETE FROM Message WHERE forum = 1 AND tid = " + tid ;
 				 
 				 stmt = conn.prepareStatement(sql);
 				 stmt.executeUpdate();

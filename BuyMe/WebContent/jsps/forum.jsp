@@ -211,7 +211,7 @@ li a {
 				<%} 
 		    	
 		    	else{%>
-					<tr> <td> <br> </td> </tr>
+					<%out.println("<br>"); %>
 					
 				<% }%>
 				
